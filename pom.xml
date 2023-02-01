@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.db.mscommunity</groupId>
+  <artifactId>school-community</artifactId>
+  <version>1.0</version>
+
+  <name>school-community</name>
+  <description>聚合服务</description>
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <modules>
+    <module>school-community-common</module>
+    <module>school-community-user</module>
+    <module>school-community-gateway</module>
+    <module>school-community-security</module>
+    <module>school-community-auth</module>
+  </modules>
+
+
+</project>
