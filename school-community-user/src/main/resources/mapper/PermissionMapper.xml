@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.db.dbcommunity.user.mapper.PermissionMapper">
+
+    <resultMap id="BaseResultMap" type="com.db.dbcommunity.user.model.entity.Permission">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="menuId" column="menu_id" jdbcType="BIGINT"/>
+        <result property="urlPerm" column="url_perm" jdbcType="VARCHAR"/>
+        <collection property="roles" ofType="String" javaType="list">
+            <result column="code"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,menu_id,
+        url_perm,create_time,update_time,
+        update_by,create_by,btn_sign
+    </sql>
+    <select id="selectPermRoles" resultMap="BaseResultMap">
+        SELECT t1.id,
+               t1.NAME,
+               t1.menu_id,
+               t1.url_perm,
+               t3.code
+        FROM permission t1
+                 LEFT JOIN role_permission t2 ON t1.id = t2.permission_id
+                 LEFT JOIN role t3 ON t2.role_id = t3.id
+    </select>
+</mapper>

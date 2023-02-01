@@ -1,0 +1,22 @@
+server:
+  port: 81
+spring:
+  application:
+    name: school-community-gateway
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      config:
+        file-extension: yaml
+        extension-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        extension-configs[1]:
+          data-id: dbcommunity-gateway.yaml
+          refresh: true
+#        - id: user_host_route
+#          uri: lb://school-community-user
+#          predicates:
+#            - Host=api.db_community.com
+#          filters:
+#            - RewritePath=/api/?(?<segment>.*),/$\{segment}

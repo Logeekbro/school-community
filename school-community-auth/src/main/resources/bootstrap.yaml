@@ -1,0 +1,16 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: school-community-auth
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      config:
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: dbcommunity-auth.yaml
+          refresh: true

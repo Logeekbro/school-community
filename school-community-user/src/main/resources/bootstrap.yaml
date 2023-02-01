@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: school-community-user
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      config:
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: dbcommunity-user.yaml
+          refresh: true
+
+server:
+  port: 1000
