@@ -65,7 +65,12 @@ public enum ResultCode implements ResultDetail {
     /**
      * 客户端认证失败
      */
-    CLIENT_AUTHENTICATION_FAILED(704, "客户端认证失败");
+    CLIENT_AUTHENTICATION_FAILED(704, "客户端认证失败"),
+
+    /**
+     * 请求不安全
+     */
+    UN_SECURITY_REQUEST(801, "请求不安全");
 
 
     private final Integer code;

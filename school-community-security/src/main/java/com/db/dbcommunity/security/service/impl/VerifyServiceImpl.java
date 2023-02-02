@@ -1,6 +1,7 @@
 package com.db.dbcommunity.security.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.db.dbcommunity.common.constant.SecurityConstant;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.security.mapper.VerifyWordMapper;
 import com.db.dbcommunity.security.service.VerifyService;
@@ -29,8 +30,6 @@ public class VerifyServiceImpl implements VerifyService {
     private static final Integer COLUMN_COUNT = 4;
     // 登录时的验证码有效时间
     public static final Integer LOGIN_VERIFY_CODE_EXPIRE_TIME = 3 * 60;
-    // 验证通过后生成的accessToken有效时间
-    public static final Integer LOGIN_ACCESS_TOKEN_EXPIRE_TIME= 5 * 60;
 
     @Resource
     private RedisCache redisCache;
@@ -116,7 +115,7 @@ public class VerifyServiceImpl implements VerifyService {
         else if (verifyDTO.getCorrectValue().equals(value)) {
             deleteLoginVerifyCode(verifyId);
             String accessToken = UUID.fastUUID().toString(true);
-            setLoginAccessToken(accessToken, accessToken);
+            setVerifyToken(accessToken);
             return accessToken;
         } else {
             deleteLoginVerifyCode(verifyId);
@@ -129,7 +128,8 @@ public class VerifyServiceImpl implements VerifyService {
         redisCache.deleteObject(LOGIN_VERIFY_CODE_PREFIX + verifyId);
     }
 
-    private void setLoginAccessToken(String username, String value) {
-        redisCache.setCacheObject(LOGIN_ACCESS_TOKEN_PREFIX + username, value, LOGIN_ACCESS_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+    private void setVerifyToken(String token) {
+        redisCache.setCacheObject(SecurityConstant.CACHE_VERIFY_TOKEN_PREFIX+token, "-",
+                SecurityConstant.VERIFY_TOKEN_EXPIRE_TIME, SecurityConstant.EXPIRE_UNIT);
     }
 }
