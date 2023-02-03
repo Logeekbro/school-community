@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.db.dbcommunity.*"})
 public class SchoolCommunitySecurityApplication {
 
     public static void main(String[] args) {
