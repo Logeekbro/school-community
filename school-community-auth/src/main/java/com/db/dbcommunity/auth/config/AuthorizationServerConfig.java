@@ -4,6 +4,7 @@ import com.db.dbcommunity.auth.security.details.client.ClientDetailsServiceImpl;
 import com.db.dbcommunity.auth.security.details.user.CommunityUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -113,13 +114,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return converter;
     }
 
+    @Value("${auth.key-pair.password}")
+    private String keyPairPassword;
+
     /**
      * 密钥库中获取密钥对(公钥+私钥)
      */
     @Bean
     public KeyPair keyPair() {
-        KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "2031500185".toCharArray());
-        return factory.getKeyPair("jwt", "2031500185".toCharArray());
+        KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), keyPairPassword.toCharArray());
+        return factory.getKeyPair("jwt", keyPairPassword.toCharArray());
     }
 }
 
