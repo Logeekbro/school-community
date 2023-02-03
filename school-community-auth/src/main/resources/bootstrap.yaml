@@ -5,7 +5,7 @@ spring:
     name: school-community-auth
   cloud:
     nacos:
-      server-addr: localhost:8848
+      server-addr: 192.168.56.10:8848
       config:
         file-extension: yaml
         shared-configs[0]:
