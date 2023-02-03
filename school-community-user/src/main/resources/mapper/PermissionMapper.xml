@@ -22,7 +22,7 @@
     <select id="selectPermRoles" resultMap="BaseResultMap">
         SELECT t1.id,
                t1.NAME,
-               t1.menu_id,
+               t1.group_id,
                t1.url_perm,
                t3.code
         FROM permission t1
