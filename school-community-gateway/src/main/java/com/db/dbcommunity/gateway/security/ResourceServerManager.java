@@ -62,23 +62,13 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
         // 从redis中获取资源权限
         Map<String, Object> urlPermRolesRules = redisTemplate.opsForHash().entries(GlobalConstant.URL_PERM_ROLES_KEY);
         List<String> authorizedRoles = new ArrayList<>(); // 拥有访问权限的角色
-        boolean requireCheck = false; // 是否需要鉴权，默认未设置拦截规则的接口不需鉴权
-
         // 获取当前资源 所需要的角色
         for (Map.Entry<String, Object> permRoles : urlPermRolesRules.entrySet()) {
             String perm = permRoles.getKey();
             if (pathMatcher.match(perm, restfulPath)) {
                 List<String> roles = Convert.toList(String.class, permRoles.getValue());
                 authorizedRoles.addAll(Convert.toList(String.class, roles));
-                if (!requireCheck) {
-                    requireCheck = true;
-                }
             }
-        }
-
-        // 如果资源不需要权限 则直接返回授权成功
-        if (!requireCheck) {
-            return Mono.just(new AuthorizationDecision(true));
         }
 
         // 判断JWT中携带的用户角色是否有权限访问

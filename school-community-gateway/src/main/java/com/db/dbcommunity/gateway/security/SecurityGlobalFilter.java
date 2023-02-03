@@ -42,7 +42,6 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         if(!isSecurityPath(request.getPath().toString())) {
             // 验证请求是否通过安全认证
             String verifyToken = request.getHeaders().getFirst(SecurityConstant.VERIFY_TOKEN_KEY);
-            System.out.println(verifyToken);
             if(verifyToken != null) {
                 // 检查安全令牌的正确性
                 Object token = redisTemplate.opsForValue().get(SecurityConstant.CACHE_VERIFY_TOKEN_PREFIX + verifyToken);
