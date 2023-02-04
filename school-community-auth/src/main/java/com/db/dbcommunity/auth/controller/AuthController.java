@@ -34,6 +34,8 @@ public class AuthController {
             Principal principal,
             @RequestParam Map<String, String> parameters
     ) throws HttpRequestMethodNotSupportedException {
+        // 暂时只支持密码模式
+        parameters.put("grant_type", "password");
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         return R.success(accessToken);
     }
