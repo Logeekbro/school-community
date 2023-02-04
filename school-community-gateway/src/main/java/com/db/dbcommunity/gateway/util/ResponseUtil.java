@@ -21,6 +21,9 @@ public class ResponseUtil {
             case TOKEN_INVALID_OR_EXPIRED:
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 break;
+            case UN_SECURITY_REQUEST:
+                response.setStatusCode(HttpStatus.valueOf(ResultCode.UN_SECURITY_REQUEST.getCode()));
+                break;
             case TOKEN_ACCESS_FORBIDDEN:
                 response.setStatusCode(HttpStatus.FORBIDDEN);
                 break;
