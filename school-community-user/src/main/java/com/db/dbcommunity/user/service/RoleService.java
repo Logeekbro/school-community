@@ -10,4 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RoleService extends IService<Role> {
 
+    boolean saveRolePermissionById(String roleId, Integer permissionId);
 }

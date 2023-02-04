@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.db.dbcommunity.user.model.entity.Permission">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
-        <result property="menuId" column="menu_id" jdbcType="BIGINT"/>
+        <result property="groupId" column="group_id" jdbcType="BIGINT"/>
         <result property="urlPerm" column="url_perm" jdbcType="VARCHAR"/>
         <collection property="roles" ofType="String" javaType="list">
             <result column="code"/>

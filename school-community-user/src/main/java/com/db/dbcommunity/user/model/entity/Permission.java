@@ -33,10 +33,10 @@ public class Permission extends BaseEntity implements Serializable {
     private String name;
 
     /**
-     * 菜单模块ID
+     * 所属分组ID
 
      */
-    private Integer menuId;
+    private Integer groupId;
 
     /**
      * URL权限标识

@@ -1,10 +1,14 @@
 package com.db.dbcommunity.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.db.dbcommunity.common.mapper.MiddleTableMapper;
 import com.db.dbcommunity.user.model.entity.Role;
+import com.db.dbcommunity.user.model.mtb.RolePermission;
 import com.db.dbcommunity.user.service.RoleService;
 import com.db.dbcommunity.user.mapper.RoleMapper;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
 * @author bin
@@ -15,6 +19,16 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     implements RoleService {
 
+    @Resource
+    private MiddleTableMapper middleTableMapper;
+
+    @Resource
+    private RolePermission rolePermission;
+
+    @Override
+    public boolean saveRolePermissionById(String roleId, Integer permissionId) {
+        return middleTableMapper.insertRelationIfNotExist(rolePermission, roleId, permissionId);
+    }
 }
 
 
