@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping(UserConstant.URI_PREFIX + "/permission")
+@RequestMapping("/permission")
 public class UserPermissionController {
 
     @Resource
@@ -32,7 +32,7 @@ public class UserPermissionController {
 
     /**
      * 根据id删除权限
-     * @param id _
+     * @param id 权限id
      * @return 是否删除成功
      */
     @DeleteMapping("/id/{id}")

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping(UserConstant.URI_PREFIX + "/info")
+@RequestMapping("/info")
 public class UserInfoController {
 
     @Resource

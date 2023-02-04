@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping(UserConstant.URI_PREFIX + "/role")
+@RequestMapping("/role")
 public class UserRoleController {
 
     @Resource
