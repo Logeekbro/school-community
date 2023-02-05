@@ -3,19 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <artifactId>school-community</artifactId>
+        <groupId>com.db.dbcommunity</groupId>
+        <version>1.0</version>
     </parent>
-    <groupId>com.db.dbcommunity</groupId>
+
     <artifactId>school-community-user</artifactId>
     <version>1.0</version>
     <name>school-community-user</name>
     <description>school-community-user</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.db.dbcommunity</groupId>
