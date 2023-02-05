@@ -1,0 +1,16 @@
+server:
+  port: 4000
+spring:
+  application:
+    name: school-community-message
+  cloud:
+    nacos:
+      server-addr: 192.168.56.10:8848
+      config:
+        file-extension: yaml
+        extension-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        extension-configs[1]:
+          data-id: dbcommunity-message.yaml
+          refresh: true
