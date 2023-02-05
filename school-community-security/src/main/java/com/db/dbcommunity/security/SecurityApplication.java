@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 @SpringBootApplication(scanBasePackages = {"com.db.dbcommunity.*"})
-public class SchoolCommunitySecurityApplication {
+public class SecurityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SchoolCommunitySecurityApplication.class, args);
+        SpringApplication.run(SecurityApplication.class, args);
     }
 
     @Component

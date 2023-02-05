@@ -12,10 +12,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @RefreshScope
 @EnableFeignClients(basePackages = {"com.db.dbcommunity.auth.feign"})
 @EnableCaching
-public class SchoolCommunityAuthApplication {
+public class AuthApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SchoolCommunityAuthApplication.class, args);
+        SpringApplication.run(AuthApplication.class, args);
     }
 
 }
