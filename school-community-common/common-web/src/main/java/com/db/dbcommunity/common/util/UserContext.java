@@ -11,9 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
-/**
- * @author： 乐哥聊编程(全平台同号)
- */
+
 public class UserContext {
 
 
