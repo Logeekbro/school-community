@@ -22,7 +22,7 @@ public class ResponseUtil {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 break;
             case UN_SECURITY_REQUEST:
-                response.setStatusCode(HttpStatus.valueOf(ResultCode.UN_SECURITY_REQUEST.getCode()));
+                response.setStatusCode(HttpStatus.LOCKED);
                 break;
             case TOKEN_ACCESS_FORBIDDEN:
                 response.setStatusCode(HttpStatus.FORBIDDEN);

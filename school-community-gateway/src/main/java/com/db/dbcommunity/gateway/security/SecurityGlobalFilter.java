@@ -26,7 +26,6 @@ import java.net.URLEncoder;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class SecurityGlobalFilter implements GlobalFilter, Ordered {
 
     @Resource
@@ -35,7 +34,6 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
     @SneakyThrows
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse exchangeResponse = exchange.getResponse();
         // 判断请求是否需要进行安全认证
