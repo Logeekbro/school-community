@@ -18,21 +18,8 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     private OAuthClientService oAuthClientService;
 
     @Override
-    @Cacheable(cacheNames = "auth", key = "'oauth-client:'+#clientId")
     public ClientDetails loadClientByClientId(String clientId) {
-        OAuthClient client = oAuthClientService.getById(clientId);
-        BaseClientDetails clientDetails = new BaseClientDetails(
-                client.getClientId(),
-                client.getResourceIds(),
-                client.getScope(),
-                client.getAuthorizedGrantTypes(),
-                client.getAuthorities(),
-                client.getWebServerRedirectUri()
-
-        );
-        clientDetails.setClientSecret(PasswordEncoderTypeEnum.NOOP.getPrefix() + client.getClientSecret());
-        clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValidity());
-        clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValidity());
-        return clientDetails;
+        // 在此
+        return oAuthClientService.loadClientByClientId(clientId);
     }
 }

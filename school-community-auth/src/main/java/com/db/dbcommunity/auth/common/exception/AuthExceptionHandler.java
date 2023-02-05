@@ -25,19 +25,9 @@ public class AuthExceptionHandler {
      * 用户不存在
      *
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UsernameNotFoundException.class)
     public R handleUsernameNotFoundException(UsernameNotFoundException e) {
-        return R.failed(ResultCode.USER_NOT_EXIST);
-    }
-
-    /**
-     * 用户名或密码异常
-     *
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidGrantException.class)
-    public R handleInvalidGrantException(InvalidGrantException e) {
         return R.failed(ResultCode.USERNAME_OR_PASSWORD_ERROR);
     }
 
@@ -45,7 +35,19 @@ public class AuthExceptionHandler {
      * 用户名或密码异常
      *
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(InvalidGrantException.class)
+    public R handleInvalidGrantException(InvalidGrantException e) {
+        e.printStackTrace();
+        return R.failed(ResultCode.USERNAME_OR_PASSWORD_ERROR);
+    }
+
+    /**
+     * 用户名或密码异常
+     *
+     */
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidClientException.class)
     public R handleInvalidGrantException(InvalidClientException e) {
         return R.failed(ResultCode.USERNAME_OR_PASSWORD_ERROR);

@@ -32,7 +32,7 @@ public class AuthController {
     @PostMapping("/token")
     public Object postAccessToken(
             Principal principal,
-            @RequestParam Map<String, String> parameters
+            @RequestBody Map<String, String> parameters
     ) throws HttpRequestMethodNotSupportedException {
         // 暂时只支持密码模式
         parameters.put("grant_type", "password");
