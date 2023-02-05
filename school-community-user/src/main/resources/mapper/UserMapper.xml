@@ -8,8 +8,8 @@
             <id property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="CHAR"/>
-            <result property="nickname" column="nickName" jdbcType="VARCHAR"/>
-            <result property="realname" column="realName" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nick_name" jdbcType="VARCHAR"/>
+            <result property="realname" column="real_name" jdbcType="VARCHAR"/>
             <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
             <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
@@ -35,14 +35,14 @@
 
     <sql id="Base_Column_List">
         user_id,username,password,
-        nickName,realName,avatar,
+        nick_name,real_name,avatar,
         introduce,email,phone,
         enter_school_year,major_id,school_id,
         status,create_time,update_time,
         deleted
     </sql>
     <select id="selectUserAuthByAccount" resultMap="UserAuthMap">
-        select t1.user_id userId, t1.username, t1.nickname, t1.password, t1.status, t3.code roleCode
+        select t1.user_id userId, t1.username, t1.password, t1.status, t3.code roleCode
         from user t1,
              user_role t2,
              role t3

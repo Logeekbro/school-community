@@ -3,6 +3,7 @@ package com.db.dbcommunity.user.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
+import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.service.UserService;
 import com.db.dbcommunity.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public UserAuthDTO getUserAuthByAccount(String account) {
         return this.baseMapper.selectUserAuthByAccount(account);
+    }
+
+    @Override
+    public UserBasicInfoVO getUserBasicInfoById(Long userId) {
+        return this.baseMapper.selectUserBasicInfoById(userId);
     }
 }
 

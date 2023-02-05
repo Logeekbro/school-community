@@ -3,6 +3,7 @@ package com.db.dbcommunity.user.service;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 
 /**
 * @author bin
@@ -17,4 +18,11 @@ public interface UserService extends IService<User> {
      * @return 用户的认证信息
      */
     UserAuthDTO getUserAuthByAccount(String account);
+
+    /**
+     * 根据用户id获取用户的基础信息
+     * @param userId 用户id
+     * @return 用户的基础信息
+     */
+    UserBasicInfoVO getUserBasicInfoById(Long userId);
 }
