@@ -1,0 +1,17 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: school-community-score
+  cloud:
+    nacos:
+      server-addr: 192.168.56.10:8848
+      config:
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: dbcommunity-score.yaml
+          refresh: true
+
