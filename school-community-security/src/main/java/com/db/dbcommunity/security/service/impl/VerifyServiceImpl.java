@@ -58,7 +58,7 @@ public class VerifyServiceImpl implements VerifyService {
         // 计数器
         int count = 1;
         // 打乱后的words集合
-        Set<String> userViewWords = new HashSet<>(WORD_COUNT);
+        Set<String> userViewWords = new HashSet<>();
         for (String word :  words) {
             userViewWords.add(word);
             int charInt = intQueue.poll();
@@ -72,9 +72,10 @@ public class VerifyServiceImpl implements VerifyService {
             }
             // 将等式进行拼接
             ruleBuilder.append(randomChar).append(" = ").append(word).append("  ");
-            // 每行达到指定个数的等式后开始拼接新字符串
+            // 每行达到指定个数的等式后开始拼接新一行的字符串
             if (count++ % COLUMN_COUNT == 0) {
                 rules.add(ruleBuilder.toString());
+                // 清空ruleBuilder中的内容
                 ruleBuilder.delete(0, ruleBuilder.length() - 1);
             }
         }
