@@ -26,6 +26,10 @@
         <module>school-community-security</module>
         <module>school-community-auth</module>
         <module>school-community-message</module>
+        <module>school-community-visit</module>
+        <module>school-community-score</module>
+        <module>school-community-article</module>
+        <module>school-community-relation</module>
     </modules>
 
     <dependencyManagement>
