@@ -2,8 +2,7 @@ package com.db.dbcommunity.user.service;
 
 import com.db.dbcommunity.user.model.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
+import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
 
 /**
 * @author bin
@@ -17,4 +16,9 @@ public interface PermissionService extends IService<Permission> {
      * @return 是否操作成功
      */
     boolean refreshPermRolesRules();
+
+    /**
+     * 添加权限
+     */
+    boolean savePermission(PermissionCreateVO permissionCreateVO);
 }

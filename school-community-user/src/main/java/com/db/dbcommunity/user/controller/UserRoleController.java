@@ -21,7 +21,7 @@ public class UserRoleController {
      * @return 是否添加成功
      */
     @PostMapping("/id/{roleId}")
-    public R<Boolean> addRolePermissionById(@PathVariable String roleId, @RequestParam Integer permissionId) {
+    public R<Boolean> addRolePermissionById(@PathVariable Integer roleId, @RequestParam Long permissionId) {
         return roleService.saveRolePermissionById(roleId, permissionId) ? R.success() : R.failed();
     }
 }

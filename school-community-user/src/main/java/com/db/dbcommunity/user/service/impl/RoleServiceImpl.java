@@ -26,7 +26,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     private RolePermission rolePermission;
 
     @Override
-    public boolean saveRolePermissionById(String roleId, Integer permissionId) {
+    public boolean saveRolePermissionById(Integer roleId, Long permissionId) {
         return middleTableMapper.insertRelationIfNotExist(rolePermission, roleId, permissionId);
     }
 }

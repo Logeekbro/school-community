@@ -4,9 +4,13 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.common.constant.GlobalConstant;
+import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.user.model.entity.Permission;
+import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
 import com.db.dbcommunity.user.service.PermissionService;
 import com.db.dbcommunity.user.mapper.PermissionMapper;
+import com.db.dbcommunity.user.service.RoleService;
+import com.db.dbcommunity.user.thread.MyThreadPoolExecutor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Resource
+    private RoleService roleService;
+
     @Override
     public boolean refreshPermRolesRules() {
         redisTemplate.delete(Collections.singletonList(GlobalConstant.URL_PERM_ROLES_KEY));
@@ -48,6 +55,17 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean savePermission(PermissionCreateVO permissionVo) {
+        Permission permission = new Permission(permissionVo.getName(), null, permissionVo.getUrlPerm());
+        if(this.baseMapper.insert(permission) > 0) {
+            if(permissionVo.getIsUserDefault()) MyThreadPoolExecutor.run(() -> roleService.saveRolePermissionById(UserConstant.DEFAULT_USER_ROLE_ID, permission.getId()));
+            MyThreadPoolExecutor.run(this::refreshPermRolesRules);
+            return true;
+        }
+        return false;
     }
 }
 

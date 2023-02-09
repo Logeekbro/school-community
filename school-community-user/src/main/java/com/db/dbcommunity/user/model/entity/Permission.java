@@ -10,6 +10,7 @@ import java.util.List;
 import com.db.dbcommunity.common.model.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -20,6 +21,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@NoArgsConstructor
 public class Permission extends BaseEntity implements Serializable {
     /**
      * 主键
@@ -68,6 +70,9 @@ public class Permission extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-
-
+    public Permission(String name, Integer groupId, String urlPerm) {
+        this.name = name;
+        this.groupId = groupId;
+        this.urlPerm = urlPerm;
+    }
 }
