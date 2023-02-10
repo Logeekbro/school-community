@@ -7,6 +7,7 @@ import com.db.dbcommunity.common.constant.GlobalConstant;
 import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.user.model.entity.Permission;
 import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
+import com.db.dbcommunity.user.model.vo.PermissionUpdateVO;
 import com.db.dbcommunity.user.service.PermissionService;
 import com.db.dbcommunity.user.mapper.PermissionMapper;
 import com.db.dbcommunity.user.service.RoleService;
@@ -59,9 +60,48 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public boolean savePermission(PermissionCreateVO permissionVo) {
-        Permission permission = new Permission(permissionVo.getName(), null, permissionVo.getUrlPerm());
-        if(this.baseMapper.insert(permission) > 0) {
+        Permission permission =
+                new Permission(null, permissionVo.getName(), permissionVo.getGroupId(), permissionVo.getUrlPerm());
+        if(this.CUD(permission, 'c')) {
             if(permissionVo.getIsUserDefault()) MyThreadPoolExecutor.run(() -> roleService.saveRolePermissionById(UserConstant.DEFAULT_USER_ROLE_ID, permission.getId()));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updatePermission(PermissionUpdateVO updateVO) {
+        Permission permission = new Permission(updateVO.getId(), updateVO.getName(), updateVO.getGroupId(), updateVO.getUrlPerm());
+        return CUD(permission, 'u');
+    }
+
+    @Override
+    public boolean deletePermissionById(Long id) {
+        Permission permission = new Permission();
+        permission.setId(id);
+        return CUD(permission, 'd');
+    }
+
+    /**
+     * 增删改的统一操作接口，方便统一添加一些刷新缓存之类的操作
+     * @param ops 操作：c-增 u-改 d-删
+     * @return 是否操作成功
+     */
+    private boolean CUD(Permission permission, char ops) {
+        int result = 0;
+        // C: 新增，U：更新，D：删除
+        switch (ops) {
+            case 'c':
+                result = this.baseMapper.insert(permission);
+                break;
+            case 'u':
+                result = this.baseMapper.updateById(permission);
+                break;
+            case 'd':
+                result = this.baseMapper.deleteById(permission);
+        }
+        if(result > 0) {
+            // 刷新缓存
             MyThreadPoolExecutor.run(this::refreshPermRolesRules);
             return true;
         }

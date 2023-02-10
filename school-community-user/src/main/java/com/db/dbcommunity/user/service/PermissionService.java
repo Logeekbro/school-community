@@ -3,6 +3,7 @@ package com.db.dbcommunity.user.service;
 import com.db.dbcommunity.user.model.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
+import com.db.dbcommunity.user.model.vo.PermissionUpdateVO;
 
 /**
 * @author bin
@@ -21,4 +22,11 @@ public interface PermissionService extends IService<Permission> {
      * 添加权限
      */
     boolean savePermission(PermissionCreateVO permissionCreateVO);
+
+    /**
+     * 更新权限信息
+     */
+    boolean updatePermission(PermissionUpdateVO permissionUpdateVO);
+
+    boolean deletePermissionById(Long id);
 }
