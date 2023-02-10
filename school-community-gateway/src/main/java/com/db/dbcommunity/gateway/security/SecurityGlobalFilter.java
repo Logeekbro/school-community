@@ -3,6 +3,7 @@ package com.db.dbcommunity.gateway.security;
 import cn.hutool.core.util.StrUtil;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.constant.AuthConstant;
+import com.db.dbcommunity.common.constant.GlobalConstant;
 import com.db.dbcommunity.common.constant.SecurityConstant;
 import com.db.dbcommunity.gateway.util.ResponseUtil;
 import com.db.dbcommunity.gateway.util.UrlPatternUtil;
@@ -35,6 +36,9 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        // 设置真实ip
+        request = request.mutate()
+                .header(GlobalConstant.REMOTE_ADDR, request.getHeaders().getFirst(GlobalConstant.REMOTE_ADDR)).build();
         ServerHttpResponse exchangeResponse = exchange.getResponse();
         // 判断请求是否需要进行安全认证
         if(!isSecurityPath(request.getPath().toString())) {
@@ -60,7 +64,7 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         //TODO 解析JWT获取jti，以jti为key判断redis的黑名单列表是否存在，存在则拦截访问
         token = StrUtil.replaceIgnoreCase(token, AuthConstant.JWT_PREFIX, Strings.EMPTY);
         String payload = StrUtil.toString(JWSObject.parse(token).getPayload());
-        request = exchange.getRequest().mutate()
+        request = request.mutate()
                 .header(AuthConstant.JWT_PAYLOAD_KEY, URLEncoder.encode(payload, "UTF-8"))
                 .build();
         exchange = exchange.mutate().request(request).build();
