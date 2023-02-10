@@ -4,6 +4,7 @@ package com.db.dbcommunity.user.controller;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.user.model.entity.Permission;
 import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
+import com.db.dbcommunity.user.model.vo.PermissionUpdateVO;
 import com.db.dbcommunity.user.service.PermissionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +33,17 @@ public class UserPermissionController {
      * @return 是否删除成功
      */
     @DeleteMapping("/id/{id}")
-    public R<Boolean> deletePermissionById(@PathVariable String id) {
-        if(permissionService.removeById(id)) {
-            permissionService.refreshPermRolesRules();
-            return R.success();
-        }
-        return R.failed();
+    public R<Void> deletePermissionById(@PathVariable Long id) {
+        return permissionService.deletePermissionById(id) ? R.success() : R.failed();
+    }
+
+    /**
+     * 修改权限
+     */
+    @PutMapping("/")
+    public R<Void> updatePermission(@RequestBody PermissionUpdateVO vo) {
+        return permissionService.updatePermission(vo) ? R.success() : R.failed();
+
     }
 
     /**

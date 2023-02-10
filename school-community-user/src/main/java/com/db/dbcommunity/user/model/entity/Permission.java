@@ -70,7 +70,8 @@ public class Permission extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public Permission(String name, Integer groupId, String urlPerm) {
+    public Permission(Long id,String name, Integer groupId, String urlPerm) {
+        this.id = id;
         this.name = name;
         this.groupId = groupId;
         this.urlPerm = urlPerm;
