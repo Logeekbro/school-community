@@ -4,6 +4,7 @@ package com.db.dbcommunity.common.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.db.dbcommunity.common.constant.AuthConstant;
+import com.db.dbcommunity.common.constant.GlobalConstant;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,5 +31,9 @@ public class UserContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getRemoteAddr() {
+        return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(GlobalConstant.REMOTE_ADDR);
     }
 }
