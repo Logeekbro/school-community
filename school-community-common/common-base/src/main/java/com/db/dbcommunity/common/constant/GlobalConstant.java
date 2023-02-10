@@ -7,5 +7,5 @@ public interface GlobalConstant {
     String USER_DEFAULT_PASSWORD = "123456";
     Long ROOT_MENU_ID = -1L;
     String ADMIN_URL_PERM = "%s:/%s%s";
-    String REMOTE_ADDR = "remoteAddr";
+    String REMOTE_ADDR = "X-Real-IP";
 }
