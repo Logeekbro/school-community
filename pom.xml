@@ -30,6 +30,7 @@
         <module>school-community-score</module>
         <module>school-community-article</module>
         <module>school-community-relation</module>
+        <module>school-community-thirdparty</module>
     </modules>
 
     <dependencyManagement>
