@@ -17,7 +17,8 @@ public class UserContext {
 
 
     public static Long getCurrentUserId() {
-        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(AuthConstant.JWT_PAYLOAD_KEY);
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest().getHeader(AuthConstant.JWT_PAYLOAD_KEY);
         if (!StringUtils.hasText(token)) {
             return null;
         }
@@ -34,6 +35,7 @@ public class UserContext {
     }
 
     public static String getRemoteAddr() {
-        return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(GlobalConstant.REMOTE_ADDR);
+        return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest().getHeader(GlobalConstant.REMOTE_ADDR);
     }
 }
