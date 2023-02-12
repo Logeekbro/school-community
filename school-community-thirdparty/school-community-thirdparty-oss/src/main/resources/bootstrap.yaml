@@ -1,0 +1,16 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: school-community-thirdparty-oss
+  cloud:
+    nacos:
+      server-addr: 192.168.56.10:8848
+      config:
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: dbcommunity-common.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: private-key.yaml
+          refresh: true
