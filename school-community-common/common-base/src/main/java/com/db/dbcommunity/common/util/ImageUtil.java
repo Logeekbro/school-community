@@ -1,9 +1,15 @@
 package com.db.dbcommunity.common.util;
 
 
+import cn.hutool.core.io.FileTypeUtil;
+import com.db.dbcommunity.common.constant.GlobalConstant;
+import com.db.dbcommunity.common.exception.ApiAsserts;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtil {
 
@@ -43,24 +49,37 @@ public class ImageUtil {
     }
 
 
-//    public static String getImgType(MultipartFile file) {
-//        try {
-//            String type = FileTypeUtil.getType(file.getInputStream());
-//            if(!GlobalVars.ACCEPT_IMG_TYPE.contains(type)){
-//                ApiAsserts.fail("不支持的文件类型");
-//                System.out.println("不支持的文件类型：" + type);
-//            }
-//            else {
-//                return type;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            ApiAsserts.fail("读取图片时出现异常");
-//        }
-//        return null;
-//    }
+    public static String getImgType(MultipartFile file) {
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+            // 判断文件的真实类型
+            String type = FileTypeUtil.getType(inputStream);
+            if(!GlobalConstant.ACCEPT_IMG_TYPE.contains(type)){
+                ApiAsserts.fail("不支持的文件类型");
+                System.out.println("不支持的文件类型：" + type);
+            }
+            else {
+                return type;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiAsserts.fail("读取图片时出现异常!");
+        } finally {
+            try {
+                assert inputStream != null;
+                // 此处需要关闭流，否则后面无法关闭文件
+                inputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                ApiAsserts.fail("读取图片时出现异常!");
+            }
+        }
+        return null;
+    }
 
     public static void main(String[] args) throws IOException {
         strToImage("a=在 b=人 c=嗄","a=给 b=锕 c=发","a=去 b=就 c=怕","a=吧 b=下 c=这");
     }
+
 }
