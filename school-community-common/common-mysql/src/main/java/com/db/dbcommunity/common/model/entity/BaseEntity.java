@@ -11,6 +11,6 @@ public class BaseEntity {
 
     @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
-    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_time",fill = FieldFill.INSERT)
     private Date updateTime;
 }
