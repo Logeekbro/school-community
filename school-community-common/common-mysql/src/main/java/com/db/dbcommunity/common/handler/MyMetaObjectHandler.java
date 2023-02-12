@@ -10,14 +10,13 @@ import java.util.Date;
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
     /**
-     * 新增填充创建时间、操作人
+     * 新增填充创建时间、修改时间
      *
-     * @param metaObject
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createTime", Date::new, Date.class);
-        this.strictUpdateFill(metaObject, "updateTime", Date::new, Date.class);
+        this.setFieldValByName("createTime", new Date(), metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
 //        this.strictInsertFill(metaObject, "createBy", () -> UserContext.getCurrentUserId(), Long.class);
 //        this.strictUpdateFill(metaObject, "updateBy", () -> UserContext.getCurrentUserId(), Long.class);
     }
@@ -27,7 +26,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      *
      * @param metaObject
      */
-    @Override
+//    @Override
     public void updateFill(MetaObject metaObject) {
 //        this.strictUpdateFill(metaObject, "updateTime", Date::new, Date.class);
 //        this.strictUpdateFill(metaObject, "updateBy", () -> UserContext.getCurrentUserId(), Long.class);
