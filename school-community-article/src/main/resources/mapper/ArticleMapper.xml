@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.db.dbcommunity.article.mapper.ArticleMapper">
+
+    <resultMap id="BaseResultMap" type="com.db.dbcommunity.article.model.entity.Article">
+            <id property="articleId" column="article_id" jdbcType="BIGINT"/>
+            <result property="authorId" column="author_id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="summary" column="summary" jdbcType="VARCHAR"/>
+            <result property="mainPic" column="main_pic" jdbcType="VARCHAR"/>
+            <result property="sectionId" column="section_id" jdbcType="INTEGER"/>
+            <result property="top" column="top" jdbcType="BIT"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="viewCount" column="view_count" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="deleted" column="deleted" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        article_id,author_id,title,
+        content,summary,main_pic,
+        section_id,top,status,
+        view_count,create_time,update_time,
+        deleted
+    </sql>
+</mapper>
