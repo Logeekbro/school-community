@@ -1,5 +1,6 @@
-package com.db.dbcommunity.user.config;
+package com.db.dbcommunity.thirdparty.config;
 
+import com.db.dbcommunity.common.constant.ThirdpartyConstant;
 import com.db.dbcommunity.common.constant.UserConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer
-                .addPathPrefix(UserConstant.URI_PREFIX, c -> c.isAnnotationPresent(RestController.class));
+                .addPathPrefix(ThirdpartyConstant.OSS_PREFIX, c -> c.isAnnotationPresent(RestController.class));
 
     }
 
