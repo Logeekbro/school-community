@@ -1,20 +1,16 @@
 package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
-import com.db.dbcommunity.article.model.vo.ArticleInfoVO;
-import com.db.dbcommunity.article.model.vo.ArticleUpdateDTO;
+import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
-import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.UserContext;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 
 @RestController
 public class ArticleController {
@@ -26,7 +22,7 @@ public class ArticleController {
      * 创建文章
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public R<SingleKeyVO> createArticle(@Validated ArticleCreateVO articleVO) {
+    public R<SingleKeyVO> createArticle(@Validated @RequestBody ArticleCreateVO articleVO) {
         articleVO.setAuthorId(UserContext.getCurrentUserId());
         Long id = articleService.create(articleVO);
         SingleKeyVO vo = new SingleKeyVO(id);
@@ -36,13 +32,11 @@ public class ArticleController {
     /**
      * 更新文章
      */
-//    @RequestMapping(value = "/", method = RequestMethod.PUT)
-//    public R<Void> updateArticle(@Validated ArticleUpdateDTO articleUpdateDTO,
-//                                 MultipartFile file) {
-//        articleUpdateDTO.setAuthorId(UserContext.getCurrentUserId());
-//        articleService.updateById(articleUpdateDTO, file);
-//        return R.success();
-//    }
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public R<Void> updateArticle(@Validated @RequestBody ArticleUpdateVO updateVO) {
+        updateVO.setAuthorId(UserContext.getCurrentUserId());
+        return articleService.update(updateVO) ? R.success() : R.failed();
+    }
 
     /**
      * 获取用户主页文章列表
