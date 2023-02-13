@@ -28,7 +28,7 @@ public class Article extends BaseEntity implements Serializable {
     /**
      * 作者id
      */
-    private Integer authorId;
+    private Long authorId;
 
     /**
      * 文章标题
