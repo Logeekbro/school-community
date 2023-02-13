@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  * 接收前端修改文章时传来的文章数据
  */
 @Data
-public class ArticleUpdateDTO {
+public class ArticleUpdateVO {
 
     /**
      * 作者的用户id
@@ -21,6 +21,7 @@ public class ArticleUpdateDTO {
     /**
      * Article-文章id
      */
+    @NotNull(message = "文章id不能为空")
     private Long articleId;
 
     /**

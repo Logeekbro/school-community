@@ -45,7 +45,6 @@ public class ArticleCreateVO implements Serializable {
      */
     @JsonProperty("content")
     @NotEmpty(message = "文章内容不能为空")
-    @Size(min = 1, message = "文章内容不能为空")
     private String content;
 
     /**
