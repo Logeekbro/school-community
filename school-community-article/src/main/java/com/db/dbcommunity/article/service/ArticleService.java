@@ -3,6 +3,7 @@ package com.db.dbcommunity.article.service;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
+import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 
 /**
 * @author bin
@@ -17,4 +18,11 @@ public interface ArticleService extends IService<Article> {
      * @return 创建好的文章id
      */
     Long create(ArticleCreateVO articleVO);
+
+    /**
+     * 更新文章
+     * @param updateDTO 要更新的文章信息
+     * @return 是否更新成功
+     */
+    boolean update(ArticleUpdateVO updateDTO);
 }

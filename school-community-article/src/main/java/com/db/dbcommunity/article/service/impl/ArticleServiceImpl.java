@@ -1,9 +1,9 @@
 package com.db.dbcommunity.article.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
+import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
@@ -11,9 +11,10 @@ import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.function.Supplier;
 
 /**
 * @author bin
@@ -27,29 +28,72 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Resource
     private TagService tagService;
 
+
+    @Transactional
     @Override
     public Long create(ArticleCreateVO articleVO) {
         Article article = MyBeanUtil.copyProps(articleVO, Article.class);
-//        if (file != null) {
-//            String mainPic = uploadService.uploadArticleMainPic(file);
-//            article.setMainPic(mainPic);
-//        }
+        // 判断文章是否需要审核
         if (articleVO.getNeedReview()) {
             article.setStatus(1);
-            article.setDeleted(true);
         } else {
             // 未经审核的文章需将状态标记为3，后续待管理员查看
             article.setStatus(3);
         }
-        if (this.baseMapper.insert(article) > 0) {
+        // 保存文章
+        if (dataChangeCall(DataChangeType.INSERT_ARTICLE, ()-> baseMapper.insert(article) > 0)) {
+            // 保存标签
             tagService.handleArticleTagCreate(article.getArticleId(), articleVO.getTags());
-            // 刷新缓存
-//            cacheService.refreshArticleIdSetCache();
             // TODO 索引至ES
         } else {
             ApiAsserts.fail(ResultCode.FAILED);
         }
         return article.getArticleId();
+    }
+
+    @Override
+    public boolean update(ArticleUpdateVO updateDTO) {
+        Article article = MyBeanUtil.copyProps(updateDTO, Article.class);
+        if (updateDTO.getNeedReview()) {
+            article.setStatus(1);
+        }
+        return dataChangeCall(DataChangeType.UPDATE_ARTICLE, () -> this.baseMapper.updateById(article) > 0);
+    }
+
+    /**
+     * 调用会改变数据的方法时的统一包装方法，以便于添加数据改变时的统一操作，如：更新缓存、发送消息等
+     * @param type 调用的方法标识
+     * @param supplier 调用的方法
+     * @return 是否执行成功
+     */
+    private boolean dataChangeCall(DataChangeType type, Supplier<Boolean> supplier) {
+        Boolean result = supplier.get();
+        switch (type) {
+            case INSERT_ARTICLE:
+        }
+        return result;
+    }
+
+    private enum DataChangeType {
+        INSERT_ARTICLE(0, "新增文章"),
+        UPDATE_ARTICLE(1, "更新文章"),
+        DELETE_ARTICLE(2, "删除文章");
+
+        private final int code;
+        private final String desc;
+
+        DataChangeType(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return this.code;
+        }
+
+        public String getDesc() {
+            return this.desc;
+        }
     }
 }
 
