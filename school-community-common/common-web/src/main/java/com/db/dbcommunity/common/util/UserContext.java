@@ -31,7 +31,7 @@ public class UserContext {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return null;
+        return -2L;
     }
 
     public static String getRemoteAddr() {
