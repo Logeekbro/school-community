@@ -3,6 +3,7 @@ package com.db.dbcommunity.article.service;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import com.db.dbcommunity.common.util.MyPage;
@@ -44,4 +45,12 @@ public interface ArticleService extends IService<Article> {
      * @return 是否删除成功
      */
     boolean deleteArticleById(Long articleId, Long userId);
+
+    /**
+     * 根据文章id和作者id获取文章详细信息
+     * @param articleId 文章id
+     * @param currentUserId 作者id-可以为空
+     * @return 文章详细信息
+     */
+    ArticleDetailInfoVO getArticleDetailById(Long articleId, Long currentUserId);
 }

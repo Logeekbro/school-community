@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 文章的主要信息
+ * 文章的详细信息
  */
 @Data
-public class ArticleInfoVO implements Serializable {
+public class ArticleDetailInfoVO implements Serializable {
     /**
      * 主键
      */

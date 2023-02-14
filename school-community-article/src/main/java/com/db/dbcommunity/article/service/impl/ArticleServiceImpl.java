@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import com.db.dbcommunity.article.service.ArticleService;
@@ -82,6 +83,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         } else {
             return dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.deleteById(articleId) > 0);
         }
+    }
+
+    @Override
+    public ArticleDetailInfoVO getArticleDetailById(Long articleId, Long currentUserId) {
+        return this.baseMapper.selectArticleDetailById(articleId, currentUserId);
     }
 
     /**

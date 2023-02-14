@@ -48,4 +48,13 @@
         AND deleted=0 AND status IN (0, 3)
         ORDER BY update_time DESC LIMIT #{offset},#{size}
     </select>
+    <select id="selectArticleDetailById" resultType="com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO">
+        SELECT article_id,title,author_id,section_id,content,main_pic,summary,create_time FROM tb_article
+        WHERE article_id=#{articleId} AND deleted=0
+        <if test="userId == null">
+            AND status IN (0,3)
+        </if>
+        LIMIT 1
+    </select>
+
 </mapper>

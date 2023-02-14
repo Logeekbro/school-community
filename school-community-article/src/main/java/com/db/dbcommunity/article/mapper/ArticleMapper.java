@@ -2,6 +2,7 @@ package com.db.dbcommunity.article.mapper;
 
 import com.db.dbcommunity.article.model.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,6 +32,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     List<UserHomePageArticleInfoVO> selectArticlePageByUserId(@Param("offset") Long offset, @Param("size") Integer size,
                                                               @Param("userId") Long userId);
+
+    ArticleDetailInfoVO selectArticleDetailById(@Param("articleId") Long articleId, @Param("userId") Long userId);
 }
 
 

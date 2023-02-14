@@ -1,10 +1,12 @@
 package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
 import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
+import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.common.util.UserContext;
@@ -67,23 +69,32 @@ public class ArticleController {
     }
 
     /**
-     * openAPI
-     * 获取文章的详细信息（包括作者id，标签，文章的内容、标题...等，详见返回值->ArticleInfoWithTagAndAuthorIdVO）
-     * SQL Override Complete
+     * 点击修改文章时调用此接口获取文章的详细信息
      *
      * @param articleId 文章id
-     * @param isReEdit  是否是重新编辑的文章
-     * @return
+     * @return 文章的详细信息
      */
-//    @RequestMapping(value = "/open/detail/{articleId}", method = RequestMethod.GET)
-//    public R<ArticleInfoVO> getArticleDetailById(@PathVariable("articleId") Long articleId,
-//                                                 @RequestParam(defaultValue = "false") Boolean isReEdit) {
-//        ArticleInfoVO vo = (ArticleInfoVO) articleService.getArticleDetailByArticleId(articleId, isReEdit);
-//        // 当该文章是重新编辑的文章时，内容只有作者本人能查看
-//        if (isReEdit && !vo.getAuthorId().equals(UserContext.getCurrentUserId()))
-//            return R.failed(ResultCode.NOT_FOUND);
-//        return R.success(vo);
-//    }
+    @RequestMapping(value = "/my/detail/{articleId}", method = RequestMethod.GET)
+    public R<ArticleDetailInfoVO> getArticleDetailById(@PathVariable("articleId") Long articleId) {
+        // 用户查看自己的文章详情时可以查看审核中(status=1)以及审核未通过(status=2)的文章
+        ArticleDetailInfoVO vo = articleService.getArticleDetailById(articleId, UserContext.getCurrentUserId());
+        return vo != null ? R.success(vo) : R.failed(ResultCode.NOT_FOUND);
+    }
+
+    /**
+     * 文章详情页调用此接口获取文章的详细信息
+     *
+     * @param articleId 文章id
+     * @return 文章的详细信息
+     */
+    @RequestMapping(value = "/detail/{articleId}", method = RequestMethod.GET)
+    public R<ArticleDetailInfoVO> getArticleHomePageDetailById(@PathVariable("articleId") Long articleId) {
+        // 此处不传userId只能查询出status=0或3的文章
+        ArticleDetailInfoVO vo = articleService.getArticleDetailById(articleId, null);
+        return vo != null ? R.success(vo) : R.failed(ResultCode.NOT_FOUND);
+    }
+
+
 
     /**
      * openAPI
