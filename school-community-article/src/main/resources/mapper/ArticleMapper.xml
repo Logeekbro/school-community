@@ -27,4 +27,25 @@
         view_count,create_time,update_time,
         deleted
     </sql>
+    <select id="selectTotal" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_article
+        <where>
+            <if test="authorId != null">
+                author_id=#{authorId}
+            </if>
+            <if test="title != null">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="sectionId != null">
+                AND section_id=#{sectionId}
+            </if>
+            AND deleted=0 AND status=0
+        </where>
+    </select>
+    <select id="selectArticlePageByUserId"
+            resultType="com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO">
+        SELECT article_id,title,view_count,create_time,update_time FROM tb_article WHERE author_id=#{userId}
+        AND deleted=0 AND status IN (0, 3)
+        ORDER BY update_time DESC LIMIT #{offset},#{size}
+    </select>
 </mapper>

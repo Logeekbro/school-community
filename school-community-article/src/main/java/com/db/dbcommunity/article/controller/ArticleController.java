@@ -2,13 +2,14 @@ package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
 import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
+import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
+import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -39,29 +40,31 @@ public class ArticleController {
     }
 
     /**
-     * 获取用户主页文章列表
-     * SQL Override Complete
+     * 根据用户id获取用户发表的文章列表
      */
-//    @RequestMapping(value = "/open/user/list", method = RequestMethod.GET)
-//    public R<MySimplePage<UserArticleListVO>> getArticleListByUserId(@RequestParam Integer userId,
-//                                                                     @RequestParam Long current,
-//                                                                     @RequestParam Long size) {
-//        MySimplePage<UserArticleListVO> page = articleService.getArticlePageByUserId(userId, current, size);
-//        return R.success(page);
-//    }
+    @RequestMapping(value = "/list/userId/{userId}", method = RequestMethod.GET)
+    public R<MyPage<UserHomePageArticleInfoVO>> getArticleListByUserId(@PathVariable Long userId,
+                                                                       @RequestParam Long current,
+                                                                       @RequestParam Integer size) {
+        MyPage<UserHomePageArticleInfoVO> page = articleService.getArticlePageByUserId(userId, current, size);
+        return R.success(page);
+    }
 
     /**
-     * 删除文章
-     * SQL Override Complete
+     * 根据文章id删除文章-需要管理员权限
      */
-//    @RequestMapping(value = "/{articleId}", method = RequestMethod.DELETE)
-//    public R<?> deleteArticleById(@PathVariable("articleId") Long articleId) {
-//        if (articleService.deleteArticleById(articleId, UserContext.getCurrentUserId())) {
-//            return R.success();
-//        } else {
-//            return R.failed();
-//        }
-//    }
+    @RequestMapping(value = "/id/{articleId}", method = RequestMethod.DELETE)
+    public R<?> deleteArticleById(@PathVariable("articleId") Long articleId) {
+        return articleService.deleteArticleById(articleId, null) ? R.success() : R.failed();
+    }
+
+    /**
+     * 用户根据id删除自己的文章
+     */
+    @RequestMapping(value = "/my/id/{articleId}", method = RequestMethod.DELETE)
+    public R<?> deleteUserArticleById(@PathVariable("articleId") Long articleId) {
+        return articleService.deleteArticleById(articleId, UserContext.getCurrentUserId()) ? R.success() : R.failed();
+    }
 
     /**
      * openAPI

@@ -1,19 +1,23 @@
 package com.db.dbcommunity.article.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
 import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
+import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
+import com.db.dbcommunity.common.util.MyPage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -54,14 +58,34 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Override
     public boolean update(ArticleUpdateVO updateDTO) {
         Article article = MyBeanUtil.copyProps(updateDTO, Article.class);
-        if (updateDTO.getNeedReview()) {
-            article.setStatus(1);
-        }
+        if (updateDTO.getNeedReview()) article.setStatus(1);
         return dataChangeCall(DataChangeType.UPDATE_ARTICLE, () -> this.baseMapper.updateById(article) > 0);
     }
 
+    @Override
+    public MyPage<UserHomePageArticleInfoVO> getArticlePageByUserId(Long userId, Long current, Integer size) {
+        Article article = new Article();
+        article.setAuthorId(userId);
+        Long total = this.baseMapper.selectTotal(article);
+        MyPage<UserHomePageArticleInfoVO> page = new MyPage<>(current, size, total);
+        List<UserHomePageArticleInfoVO> vos = this.baseMapper.selectArticlePageByUserId(page.offset(), page.getSize(), userId);
+        page.setRecords(vos);
+        return page;
+    }
+
+    @Override
+    public boolean deleteArticleById(Long articleId, Long userId) {
+        if(userId != null) {
+            LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Article::getArticleId, articleId).eq(Article::getAuthorId, userId);
+            return dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.delete(queryWrapper) > 0);
+        } else {
+            return dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.deleteById(articleId) > 0);
+        }
+    }
+
     /**
-     * 调用会改变数据的方法时的统一包装方法，以便于添加数据改变时的统一操作，如：更新缓存、发送消息等
+     * 调用会改变数据的方法时的统一包装方法，以便于添加 数据改变时 的统一操作，如：更新缓存、发送消息等
      * @param type 调用的方法标识
      * @param supplier 调用的方法
      * @return 是否执行成功
