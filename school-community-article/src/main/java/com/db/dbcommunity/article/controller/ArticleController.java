@@ -1,9 +1,6 @@
 package com.db.dbcommunity.article.controller;
 
-import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
-import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
-import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
-import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
+import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.api.ResultCode;
@@ -14,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.Max;
+import java.util.List;
 
 @RestController
 public class ArticleController {
@@ -47,7 +46,7 @@ public class ArticleController {
     @RequestMapping(value = "/list/userId/{userId}", method = RequestMethod.GET)
     public R<MyPage<UserHomePageArticleInfoVO>> getArticleListByUserId(@PathVariable Long userId,
                                                                        @RequestParam Long current,
-                                                                       @RequestParam Integer size) {
+                                                                       @RequestParam Short size) {
         MyPage<UserHomePageArticleInfoVO> page = articleService.getArticlePageByUserId(userId, current, size);
         return R.success(page);
     }
@@ -99,145 +98,82 @@ public class ArticleController {
     /**
      * openAPI
      * 获取最新文章
-     * SQL Override Complete
      *
-     * @return
+     * @return 文章列表中需要的文章信息
      */
-//    @RequestMapping(value = "/open/latest", method = RequestMethod.GET)
-//    public R<MySimplePage<ArticleAndAuthorInfoVO>> getLatestArticles(@Param("current") Long current,
-//                                                                     @Param("size") Long size) {
-//        MySimplePage<ArticleAndAuthorInfoVO> page =
-//                articleService.getLatestArticleDetails(current, size);
-//        return R.success(page);
-//    }
+    @RequestMapping(value = "/latest", method = RequestMethod.GET)
+    public R<MyPage<ArticleMainInfoVO>> getLatestArticles(Long current,Short size) {
+        MyPage<ArticleMainInfoVO> page =
+                articleService.getLatestArticleMainInfo(current, size);
+        return R.success(page);
+    }
 
     /**
      * openAPI
      * 获取热门文章
-     * SQL Override Complete
      *
-     * @param current
-     * @param size
-     * @return
+     * @return 文章列表中需要的文章信息
      */
-//    @RequestMapping(value = "/open/popular", method = RequestMethod.GET)
-//    public R<MySimplePage<ArticleAndAuthorInfoVO>> getPopularArticles(@Param("current") Long current,
-//                                                                      @Param("size") Long size) {
-//        MySimplePage<ArticleAndAuthorInfoVO> page =
-//                articleService.getPopularArticleDetails(current, size);
-//        return R.success(page);
-//    }
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public R<MyPage<ArticleMainInfoVO>> getPopularArticles(Long current, Short size) {
+        MyPage<ArticleMainInfoVO> page =
+                articleService.getPopularArticleMainInfo(current, size);
+        return R.success(page);
+    }
 
     /**
      * openAPI
      * 获取用户发表的文章数量
-     * SQL Override Complete
      *
-     * @param authorId
-     * @return
      */
-//    @RequestMapping(value = "/open/count/{authorId}", method = RequestMethod.GET)
-//    public R<SingleKeyVO> getArticleCountByAuthorId(@PathVariable("authorId") int authorId) {
-//        Long count = articleService.getArticleCountByAuthorId(authorId);
-//        SingleKeyVO vo = new SingleKeyVO(count);
-//        return R.success(vo);
-//    }
+    @RequestMapping(value = "/count/userId/{authorId}", method = RequestMethod.GET)
+    public R<SingleKeyVO> getArticleCountByAuthorId(@PathVariable("authorId") Long authorId) {
+        Long count = articleService.getArticleCountByAuthorId(authorId);
+        SingleKeyVO vo = new SingleKeyVO(count);
+        return R.success(vo);
+    }
 
 
     /**
      * openAPI
-     * 获取置顶文章
+     * 获取置顶文章，可指定分区
+     * @param sectionId 分区id，可以为空
      */
-//    @RequestMapping(value = "/open/index/top", method = RequestMethod.GET)
-//    public R<List<ArticleAndAuthorInfoVO>> getIndexTopArticle() {
-//        List<ArticleAndAuthorInfoVO> vo = articleService.getIndexTopArticle();
-//        return R.success(vo);
-//    }
+    @RequestMapping(value = "/top", method = RequestMethod.GET)
+    public R<List<ArticleMainInfoVO>> getIndexTopArticle(@RequestParam(value = "sectionId", required = false) Integer sectionId) {
+        List<ArticleMainInfoVO> vo = articleService.getTopArticle(sectionId);
+        return R.success(vo);
+    }
 
     /**
-     * openAPI
      * 通过文章id获取文章标题
      */
-//    @RequestMapping("/open/title/{articleId}")
-//    public R<SingleKeyVO> getTitleByArticleId(@PathVariable Long articleId) {
-//        String title = articleService.getTitleByArticleId(articleId);
-//        SingleKeyVO vo = new SingleKeyVO(title);
-//        return R.success(vo);
-//    }
+    @RequestMapping("/open/title/{articleId}")
+    public R<SingleKeyVO> getTitleByArticleId(@PathVariable Long articleId) {
+        String title = articleService.getTitleByArticleId(articleId);
+        SingleKeyVO vo = new SingleKeyVO(title);
+        return R.success(vo);
+    }
 
     /**
      * openAPI
-     * 获取TopN活跃作者的id及其发表的文章数量
+     * 获取TopN活跃作者的id和文章数量(活跃的判断依据：发表的文章数量)
      */
-//    @RequestMapping("/open/mostActiveAuthors/{n}")
-//    public R<List<ArticleActiveAuthorVO>> getActiveAuthors(@PathVariable Integer n) {
-//        List<ArticleActiveAuthorVO> authors = articleService.getActiveAuthors(n);
-//        return R.success(authors);
-//    }
+    @RequestMapping("/activeAuthors/{n}")
+    public R<List<AuthorIdWithArticleCountVO>> getActiveAuthors(@PathVariable Integer n) {
+        List<AuthorIdWithArticleCountVO> authors = articleService.getActiveAuthors(n);
+        return R.success(authors);
+    }
 
-    /**
-     * AdminAPI
-     * 直接根据id删除文章
-     */
-//    @RequestMapping(value = "/admin/id", method = RequestMethod.DELETE)
-//    @PreAuthorize("hasAuthority('article.delete')")
-//    public R<Boolean> deleteArticleByArticleId(@RequestParam Long articleId) {
-//        boolean result = articleService.removeById(articleId);
-//        if (result) return R.success();
-//        return R.failed("删除失败");
-//    }
 
-    /**
-     * AdminAPI
-     * 获取所有待审核的文章
-     */
-//    @RequestMapping("/admin/needReviewList")
-//    @PreAuthorize("hasAuthority('article.review')")
-//    public R<List<? extends ArticleVO>> getNeedReviewArticleList() {
-//        return R.success(articleService.getNeedReviewArticleList(null));
-//    }
 
-    /**
-     * AdminAPI
-     * 更新文章审核状态
-     */
-//    @RequestMapping(value = "/admin/review/id/{articleId}", method = RequestMethod.PUT)
-//    @PreAuthorize("hasAuthority('article.review')")
-//    public R<?> passArticle(@PathVariable Long articleId,
-//                            @RequestParam(defaultValue = "") String description,
-//                            @NotNull(message = "请选择是否通过审核") Boolean isPass) {
-//        Boolean result = articleService.
-//                changeArticleReviewStatus(articleId, UserContext.getCurrentUserId(), description, isPass);
-//        if (result) return R.success();
-//        else return R.failed();
-//    }
-
-    /**
-     * 根据用户id获取该用户待审核的文章列表
-     */
-//    @RequestMapping(value = "/needReviewList", method = RequestMethod.GET)
-//    public R<List<? extends ArticleVO>> getUserNeedReviewArticleList() {
-//        List<? extends ArticleVO> list = articleService.getNeedReviewArticleList(UserContext.getCurrentUserId());
-//        return R.success(list);
-//    }
-
-    /**
-     * 根据用户id获取该用户审核未通过的文章列表
-     */
-//    @RequestMapping(value = "/unPassReviewList", method = RequestMethod.GET)
-//    public R<List<? extends ArticleVO>> getUnPassReviewList() {
-//        List<? extends ArticleVO> list = articleService.getUnPassReviewArticleList(UserContext.getCurrentUserId());
-//        return R.success(list);
-//    }
 
     /**
      * AdminAPI
      * 将文章设为置顶或取消置顶
      */
-//    @RequestMapping(value = "/admin/topStatus", method = RequestMethod.PUT)
-//    public R<SingleKeyVO> changeArticleTopStatus(@RequestParam Long articleId) {
-//        Boolean result = articleService.changeArticleTopStatus(articleId);
-//        SingleKeyVO vo = new SingleKeyVO(result);
-//        return R.success(vo);
-//    }
+    @RequestMapping(value = "/topStatus", method = RequestMethod.PUT)
+    public R<Void> changeArticleTopStatus(@RequestParam Long articleId) {
+        return articleService.changeArticleTopStatus(articleId) ? R.success() : R.failed();
+    }
 }

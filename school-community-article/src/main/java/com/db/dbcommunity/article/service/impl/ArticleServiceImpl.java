@@ -2,14 +2,14 @@ package com.db.dbcommunity.article.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.db.dbcommunity.article.enums.DataChangeType;
+import com.db.dbcommunity.article.enums.OrderType;
 import com.db.dbcommunity.article.model.entity.Article;
-import com.db.dbcommunity.article.model.vo.ArticleCreateVO;
-import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
-import com.db.dbcommunity.article.model.vo.ArticleUpdateVO;
-import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
+import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
+import com.db.dbcommunity.article.util.MethodUtil;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.function.Supplier;
+
+import static com.db.dbcommunity.article.util.MethodUtil.dataChangeCall;
 
 /**
 * @author bin
@@ -64,7 +66,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     }
 
     @Override
-    public MyPage<UserHomePageArticleInfoVO> getArticlePageByUserId(Long userId, Long current, Integer size) {
+    public MyPage<UserHomePageArticleInfoVO> getArticlePageByUserId(Long userId, Long current, Short size) {
         Article article = new Article();
         article.setAuthorId(userId);
         Long total = this.baseMapper.selectTotal(article);
@@ -90,41 +92,56 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         return this.baseMapper.selectArticleDetailById(articleId, currentUserId);
     }
 
-    /**
-     * 调用会改变数据的方法时的统一包装方法，以便于添加 数据改变时 的统一操作，如：更新缓存、发送消息等
-     * @param type 调用的方法标识
-     * @param supplier 调用的方法
-     * @return 是否执行成功
-     */
-    private boolean dataChangeCall(DataChangeType type, Supplier<Boolean> supplier) {
-        Boolean result = supplier.get();
-        switch (type) {
-            case INSERT_ARTICLE:
-        }
-        return result;
+    // TODO 高频数据，需要缓存
+    @Override
+    public MyPage<ArticleMainInfoVO> getLatestArticleMainInfo(Long current, Short size) {
+        Long total = this.baseMapper.selectTotal(null);
+        MyPage<ArticleMainInfoVO> page = new MyPage<>(current, size, total);
+        List<ArticleMainInfoVO> vos =
+                this.baseMapper.selectArticleMainInfoPageWithOrder(page.offset(), page.getSize(), OrderType.CREATE_TIME_DESC);
+        page.setRecords(vos);
+        return page;
     }
 
-    private enum DataChangeType {
-        INSERT_ARTICLE(0, "新增文章"),
-        UPDATE_ARTICLE(1, "更新文章"),
-        DELETE_ARTICLE(2, "删除文章");
-
-        private final int code;
-        private final String desc;
-
-        DataChangeType(int code, String desc) {
-            this.code = code;
-            this.desc = desc;
-        }
-
-        public int getCode() {
-            return this.code;
-        }
-
-        public String getDesc() {
-            return this.desc;
-        }
+    // TODO 高频数据，需要缓存
+    @Override
+    public MyPage<ArticleMainInfoVO> getPopularArticleMainInfo(Long current, Short size) {
+        Long total = this.baseMapper.selectTotal(null);
+        MyPage<ArticleMainInfoVO> page = new MyPage<>(current, size, total);
+        List<ArticleMainInfoVO> vos =
+                this.baseMapper.selectArticleMainInfoPageWithOrder(page.offset(), page.getSize(), OrderType.VIEW_COUNT_DESC);
+        page.setRecords(vos);
+        return page;
     }
+
+    @Override
+    public Long getArticleCountByAuthorId(Long authorId) {
+        Article article = new Article();
+        article.setAuthorId(authorId);
+        return this.baseMapper.selectTotal(article);
+    }
+
+    @Override
+    public List<ArticleMainInfoVO> getTopArticle(Integer sectionId) {
+        return this.baseMapper.selectTopArticle(sectionId);
+    }
+
+    @Override
+    public String getTitleByArticleId(Long articleId) {
+        return this.baseMapper.selectTitleById(articleId);
+    }
+
+    @Override
+    public boolean changeArticleTopStatus(Long articleId) {
+        return this.baseMapper.updateArticleTopStatus(articleId);
+    }
+
+    @Override
+    public List<AuthorIdWithArticleCountVO> getActiveAuthors(Integer n) {
+        return this.baseMapper.selectTopNAuthor(n);
+    }
+
+
 }
 
 
