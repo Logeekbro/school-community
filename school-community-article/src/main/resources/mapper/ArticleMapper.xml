@@ -39,7 +39,7 @@
             <if test="sectionId != null">
                 AND section_id=#{sectionId}
             </if>
-            AND deleted=0 AND status=0
+            AND deleted=0 AND status IN (0,3)
         </where>
     </select>
     <select id="selectArticlePageByUserId"
@@ -58,6 +58,27 @@
             AND author_id=#{userId}
         </if>
         LIMIT 1
+    </select>
+    <select id="selectArticleMainInfoPageWithOrder"
+            resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
+        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+        WHERE status IN (0,3) AND deleted=0
+        ORDER BY ${order.field} ${order.type} LIMIT #{offset},#{size}
+    </select>
+    <select id="selectTopArticle" resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
+        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+        WHERE status IN (0,3) AND deleted=0 AND top
+        <if test="sectionId != null">
+            AND section_id=#{sectionId}
+        </if>
+    </select>
+    <select id="selectNeedReviewArticleListById"
+            resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
+        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+        WHERE status=1 AND deleted=0
+        <if test="userId != null">
+            AND author_id=#{userId}
+        </if>
     </select>
 
 </mapper>
