@@ -6,13 +6,13 @@ public class MyPage<T> {
 
     private Long current;
 
-    private Integer size;
+    private Short size;
 
     private Long total;
 
     private List<T> records;
 
-    public MyPage(Long current, Integer size, Long total) {
+    public MyPage(Long current, Short size, Long total) {
         this.current = current < 1 ? 1 : current;
         this.size = size < 0 ? 0 : size;
         this.total = total;
@@ -30,11 +30,11 @@ public class MyPage<T> {
         this.current = current;
     }
 
-    public Integer getSize() {
+    public Short getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(Short size) {
         this.size = size;
     }
 
