@@ -54,6 +54,9 @@
         <if test="userId == null">
             AND status IN (0,3)
         </if>
+        <if test="userId != null">
+            AND author_id=#{userId}
+        </if>
         LIMIT 1
     </select>
 
