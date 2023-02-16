@@ -18,6 +18,8 @@ public class MyThreadPoolExecutor {
         CompletableFuture.runAsync(runnable, threadPool);
     }
 
-
+    public static ExecutorService getThreadPool() {
+        return threadPool;
+    }
 
 }
