@@ -21,19 +21,8 @@ public class MethodUtil {
         Boolean result = supplier.get();
 
         // 后置操作...
-        switch (type) {
-            case ARTICLE_PASS_REVIEW:
-            case ARTICLE_NOT_PASS_REVIEW:
-                ArticleReviewResultVO resultVO = ServiceContext.getReviewResultVo();
-                System.out.println("resultVO: " + resultVO);
-                Long articleId = ServiceContext.getArticleId();
-                System.out.println("articleId: " + articleId);
-                System.out.println("tid:" + Thread.currentThread().getId());
-                // 1.保存审核记录
+        DataChangeFactory.handle(type);
 
-                // 2.发送通知给用户
-                break;
-        }
         return result;
     }
 }

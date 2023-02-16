@@ -80,5 +80,13 @@
             AND author_id=#{userId}
         </if>
     </select>
+    <select id="selectUnPassReviewArticleListById"
+            resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
+        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+        WHERE status=2 AND deleted=0
+        <if test="userId != null">
+            AND author_id=#{userId}
+        </if>
+    </select>
 
 </mapper>

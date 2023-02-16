@@ -59,6 +59,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("SELECT author_id, COUNT(*) articleCount FROM tb_article " +
             "WHERE deleted=0 AND status IN (0,3) GROUP BY author_id ORDER BY COUNT(*) DESC LIMIT #{n}")
     List<AuthorIdWithArticleCountVO> selectTopNAuthor(Integer n);
+
+    List<ArticleMainInfoVO> selectUnPassReviewArticleListById(Long currentUserId);
 }
 
 
