@@ -1,14 +1,22 @@
 package com.db.dbcommunity.article.handler;
 
 import com.db.dbcommunity.article.enums.DataChangeType;
+import com.db.dbcommunity.article.model.entity.ReviewHistory;
 import com.db.dbcommunity.article.model.vo.ArticleReviewResultVO;
+import com.db.dbcommunity.article.service.ReviewHistoryService;
+import com.db.dbcommunity.article.thread.MyThreadPoolExecutor;
 import com.db.dbcommunity.article.thread.ServiceContext;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 
 @Component
 public class ReviewStatusChangeHandler implements IDataChangeHandler {
+
+    @Resource
+    private ReviewHistoryService reviewHistoryService;
 
     @Override
     public DataChangeType[] handleType() {
@@ -21,9 +29,22 @@ public class ReviewStatusChangeHandler implements IDataChangeHandler {
             ArticleReviewResultVO resultVO = ServiceContext.getReviewResultVo();
             // 审核员的id
             Long reviewUserId = UserContext.getCurrentUserId();
-            System.out.println("resultVO: " + resultVO);
             Long articleId = ServiceContext.getArticleId();
-            System.out.println("articleId: " + articleId);
+            // 保存审核记录
+            MyThreadPoolExecutor.run(() -> {
+                try{
+                    ReviewHistory reviewHistory = new ReviewHistory();
+                    reviewHistory.setArticleId(articleId);
+                    reviewHistory.setIsPass(resultVO.getIsPass());
+                    reviewHistory.setDescription(resultVO.getDesc());
+                    reviewHistory.setUserId(reviewUserId);
+                    reviewHistoryService.save(reviewHistory);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
         };
     }
 }
