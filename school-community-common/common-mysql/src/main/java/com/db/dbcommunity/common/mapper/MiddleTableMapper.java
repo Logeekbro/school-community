@@ -35,6 +35,16 @@ public interface MiddleTableMapper {
                                @Param("id1") Serializable id1,
                                @Param("id2") Serializable id2);
 
+    @Delete("DELETE FROM ${table.tableName()} " +
+            "WHERE ${table.firstFiledName()}=#{id1}")
+    boolean deleteRelationById1(@Param("table") MiddleTable table,
+                                @Param("id1") Serializable id1);
+
+    @Delete("DELETE FROM ${table.tableName()} " +
+            "WHERE ${table.secondFiledName()}=#{id2}")
+    boolean deleteRelationById2(@Param("table") MiddleTable table,
+                                @Param("id2") Serializable id2);
+
     @Select("SELECT COUNT(*) FROM ${table.tableName()} " +
             "WHERE ${table.firstFiledName()}=#{id1} ")
     Long selectCountById1(@Param("table") MiddleTable table,
@@ -47,12 +57,11 @@ public interface MiddleTableMapper {
 
     @Select("SELECT ${table.firstFiledName()} FROM ${table.tableName()} " +
             "WHERE ${table.secondFiledName()}=#{id2} ")
-    List<String> selectId1ListById2(@Param("table")MiddleTable table,
+    List<String> selectId1ListById2(@Param("table") MiddleTable table,
                                     @Param("id2") Serializable id2);
 
     @Select("SELECT ${table.secondFiledName()} FROM ${table.tableName()} " +
-            "WHERE ${table.firstFiledName()}=#{id1} " +
-            "${table.visible()}")
+            "WHERE ${table.firstFiledName()}=#{id1} ")
     List<String> selectId2ListById1(@Param("table") MiddleTable table,
                                     @Param("id1") Serializable id1);
 
