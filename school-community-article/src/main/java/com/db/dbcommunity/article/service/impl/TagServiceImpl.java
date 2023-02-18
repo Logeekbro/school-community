@@ -1,5 +1,6 @@
 package com.db.dbcommunity.article.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Tag;
 import com.db.dbcommunity.article.model.mtb.ArticleTag;
@@ -9,6 +10,7 @@ import com.db.dbcommunity.common.mapper.MiddleTableMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,6 +34,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
             this.baseMapper.insertIfNotExist(tagName);
             middleTableMapper.insertRelationIfNotExist(articleTag, articleId, tagName);
         }
+    }
+
+    @Override
+    public List<String> selectTagNameListByArticleId(Long articleId) {
+        return middleTableMapper.selectId2ListById1(articleTag, articleId);
     }
 }
 

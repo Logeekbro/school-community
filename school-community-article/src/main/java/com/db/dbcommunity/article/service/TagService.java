@@ -3,6 +3,7 @@ package com.db.dbcommunity.article.service;
 import com.db.dbcommunity.article.model.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,4 +14,9 @@ import java.util.Set;
 public interface TagService extends IService<Tag> {
 
     void handleArticleTagCreate(Long articleId, Set<String> tags);
+
+    /**
+     * 通过文章id获取该文章的标签名列表
+     */
+    List<String> selectTagNameListByArticleId(Long articleId);
 }
