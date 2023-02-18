@@ -9,6 +9,7 @@ import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
+import com.db.dbcommunity.article.thread.ServiceContext;
 import com.db.dbcommunity.article.util.MethodUtil;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
@@ -78,6 +79,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Override
     public boolean deleteArticleById(Long articleId, Long userId) {
+        ServiceContext.setArticleId(articleId);
         if(userId != null) {
             LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Article::getArticleId, articleId).eq(Article::getAuthorId, userId);
