@@ -20,6 +20,6 @@ public class BeansLocator implements ApplicationContextAware {
         // 扫描所有IDataChangeHandler的实现类并添加到DataChangeFactory的map中
         Map<String, IDataChangeHandler> beans = applicationContext.getBeansOfType(IDataChangeHandler.class);
         beans.forEach((s, i) ->
-                CompletableFuture.runAsync(() -> DataChangeFactory.addHandler(i), MyThreadPoolExecutor.getThreadPool()));
+                MyThreadPoolExecutor.run(() -> DataChangeFactory.addHandler(i)));
     }
 }
