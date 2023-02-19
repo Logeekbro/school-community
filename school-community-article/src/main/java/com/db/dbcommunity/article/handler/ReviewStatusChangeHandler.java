@@ -6,6 +6,7 @@ import com.db.dbcommunity.article.model.vo.ArticleReviewResultVO;
 import com.db.dbcommunity.article.service.ReviewHistoryService;
 import com.db.dbcommunity.article.thread.MyThreadPoolExecutor;
 import com.db.dbcommunity.article.thread.ServiceContext;
+import com.db.dbcommunity.common.IDataChangeHandler;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,9 @@ public class ReviewStatusChangeHandler implements IDataChangeHandler {
     private ReviewHistoryService reviewHistoryService;
 
     @Override
-    public DataChangeType[] handleType() {
-        return new DataChangeType[]{DataChangeType.ARTICLE_PASS_REVIEW, DataChangeType.ARTICLE_NOT_PASS_REVIEW};
+    public String[] handleType() {
+        return new String[]{DataChangeType.ARTICLE_PASS_REVIEW.getDesc(),
+                DataChangeType.ARTICLE_NOT_PASS_REVIEW.getDesc()};
     }
 
     @Override

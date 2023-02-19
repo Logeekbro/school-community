@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.db.dbcommunity</groupId>
-            <artifactId>common-web</artifactId>
+            <artifactId>common-datachangehelper</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -24,6 +24,8 @@
             <artifactId>common-mysql</artifactId>
             <version>1.0</version>
         </dependency>
+
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

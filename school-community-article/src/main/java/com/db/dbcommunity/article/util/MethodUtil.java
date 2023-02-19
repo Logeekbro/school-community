@@ -1,6 +1,7 @@
 package com.db.dbcommunity.article.util;
 
 import com.db.dbcommunity.article.enums.DataChangeType;
+import com.db.dbcommunity.common.DataChangeFactory;
 
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class MethodUtil {
         Boolean result = supplier.get();
 
         // 后置操作...
-        DataChangeFactory.handle(type);
+        DataChangeFactory.handle(type.getDesc());
 
         return result;
     }
