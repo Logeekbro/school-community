@@ -13,6 +13,7 @@
         <module>common-mysql</module>
         <module>common-web</module>
         <module>common-redis</module>
+        <module>common-datachangehelper</module>
     </modules>
 
     <artifactId>school-community-common</artifactId>
