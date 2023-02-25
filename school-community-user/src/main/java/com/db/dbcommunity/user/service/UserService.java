@@ -25,4 +25,9 @@ public interface UserService extends IService<User> {
      * @return 用户的基础信息
      */
     UserBasicInfoVO getUserBasicInfoById(Long userId);
+
+    /**
+     * 修改用户密码
+     */
+    boolean updatePassword(String oldPwd, String newPwd, Long currentUserId);
 }

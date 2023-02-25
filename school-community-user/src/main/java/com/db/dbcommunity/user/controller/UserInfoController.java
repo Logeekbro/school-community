@@ -6,11 +6,10 @@ import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/info")
@@ -36,5 +35,10 @@ public class UserInfoController {
         Long userId = UserContext.getCurrentUserId();
         UserBasicInfoVO vo = userService.getUserBasicInfoById(userId);
         return R.success(vo);
+    }
+
+    @PutMapping("/password")
+    public R<Void> updatePassword(@RequestBody Map<String, String> body) {
+        return userService.updatePassword(body.get("oldPwd"), body.get("newPwd"), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
 }
