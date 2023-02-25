@@ -34,12 +34,12 @@ public class User implements Serializable {
     /**
      * 用户昵称
      */
-    private String nickname;
+    private String nickName;
 
     /**
      * 用户真名
      */
-    private String realname;
+    private String realName;
 
     /**
      * 用户头像地址
@@ -99,32 +99,4 @@ public class User implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", userId=").append(userId);
-        sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
-        sb.append(", nickname=").append(nickname);
-        sb.append(", realname=").append(realname);
-        sb.append(", avatar=").append(avatar);
-        sb.append(", introduce=").append(introduce);
-        sb.append(", email=").append(email);
-        sb.append(", phone=").append(phone);
-        sb.append(", enterSchoolYear=").append(enterSchoolYear);
-        sb.append(", majorId=").append(majorId);
-        sb.append(", schoolId=").append(schoolId);
-        sb.append(", status=").append(status);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", deleted=").append(deleted);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }
