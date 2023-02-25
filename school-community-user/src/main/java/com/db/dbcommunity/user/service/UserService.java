@@ -30,4 +30,14 @@ public interface UserService extends IService<User> {
      * 修改用户密码
      */
     boolean updatePassword(String oldPwd, String newPwd, Long currentUserId);
+
+    /**
+     * 用户退出登录
+     */
+    boolean logout(String jti);
+
+    /**
+     * 将jti注册到系统中
+     */
+    boolean login(String jti);
 }

@@ -9,8 +9,11 @@ import com.db.dbcommunity.user.model.entity.User;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.service.UserService;
 import com.db.dbcommunity.user.mapper.UserMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 import static com.db.dbcommunity.common.MethodUtil.dataChangeCall;
 
@@ -22,6 +25,9 @@ import static com.db.dbcommunity.common.MethodUtil.dataChangeCall;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService {
+
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserAuthDTO getUserAuthByAccount(String account) {
@@ -44,15 +50,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(encoder.matches(oldPwd, user.getPassword())){
             String encode = encoder.encode(newPwd);
             user.setPassword(encode);
-            // TODO 登出账号
-            String currentUserJti = UserContext.getCurrentUserJti();
-            System.out.println(currentUserJti);
-            return dataChangeCall(DataChangeType.UPDATE_PASSWORD.getDesc(), () -> this.baseMapper.updateById(user) > 0);
+            boolean result =
+                    dataChangeCall(DataChangeType.UPDATE_PASSWORD.getDesc(), () -> this.baseMapper.updateById(user) > 0);
+            if(result) {
+                // 登出账号
+                logout(UserContext.getCurrentUserJti());
+            }
+            return result;
         }
         else{
             ApiAsserts.fail("原密码不正确");
         }
         return false;
+    }
+
+    @Override
+    public boolean logout(String jti) {
+        return Boolean.TRUE.equals(redisTemplate.delete(jti));
+    }
+
+    @Override
+    public boolean login(String jti) {
+        redisTemplate.opsForValue().set(jti, "");
+        return true;
     }
 }
 
