@@ -34,6 +34,24 @@ public class UserContext {
         return -2L;
     }
 
+    public static String getCurrentUserJti() {
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest().getHeader(AuthConstant.JWT_PAYLOAD_KEY);
+        if (!StringUtils.hasText(token)) {
+            return null;
+        }
+        try {
+            JSONObject jsonObject = JSON.parseObject(URLDecoder.decode(token, "utf-8"));
+            if (Objects.isNull(jsonObject)) {
+                return null;
+            }
+            return jsonObject.getString("jti");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getRemoteAddr() {
         return  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest().getHeader(GlobalConstant.REMOTE_ADDR);
