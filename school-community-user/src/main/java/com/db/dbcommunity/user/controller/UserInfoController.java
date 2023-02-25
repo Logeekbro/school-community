@@ -24,12 +24,18 @@ public class UserInfoController {
         return "test";
     }
 
+    /**
+     * 获取用户登录时的验证信息
+     */
     @GetMapping("/userAuth")
     public R<UserAuthDTO> getUserAuthByUsername(String username) {
         UserAuthDTO userAuthDTO = userService.getUserAuthByAccount(username);
         return R.success(userAuthDTO);
     }
 
+    /**
+     * 获取用户的基本信息
+     */
     @GetMapping("/basic")
     public R<UserBasicInfoVO> getUserBasicInfo() {
         Long userId = UserContext.getCurrentUserId();
@@ -37,8 +43,13 @@ public class UserInfoController {
         return R.success(vo);
     }
 
+    /**
+     * 修改密码
+     */
     @PutMapping("/password")
     public R<Void> updatePassword(@RequestBody Map<String, String> body) {
         return userService.updatePassword(body.get("oldPwd"), body.get("newPwd"), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
+
+
 }
