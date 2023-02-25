@@ -1,7 +1,9 @@
 package com.db.dbcommunity.auth.controller;
 
 
+import com.db.dbcommunity.auth.feign.UserFeignClient;
 import com.db.dbcommunity.common.api.R;
+import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.util.UserContext;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class AuthController {
     @Resource
     private KeyPair keyPair;
 
+    @Resource
+    private UserFeignClient userFeignClient;
+
     @PostMapping("/token")
     public Object postAccessToken(
             Principal principal,
@@ -41,7 +46,11 @@ public class AuthController {
         parameters.remove("scope");
         parameters.remove("client_id");
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
-        return R.success(accessToken);
+        assert accessToken != null;
+        // 将token中的jti注册到系统中，使服务端能够控制token的有效性
+        R<Void> result = userFeignClient.login((String) accessToken.getAdditionalInformation().get("jti"));
+        if(result.getCode().equals(ResultCode.SUCCESS.getCode())) return R.success(accessToken);
+        return R.failed("登录失败");
     }
 
     @GetMapping("/public-key")

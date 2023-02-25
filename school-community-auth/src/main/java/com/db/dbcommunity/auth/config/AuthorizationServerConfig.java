@@ -99,7 +99,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 additionalInfo.put("username", CommunityUserDetails.getUsername());
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
             }
-
             return accessToken;
         };
     }

@@ -8,6 +8,7 @@ import com.db.dbcommunity.common.constant.SecurityConstant;
 import com.db.dbcommunity.gateway.util.ResponseUtil;
 import com.db.dbcommunity.gateway.util.UrlPatternUtil;
 import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.Payload;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.net.URLEncoder;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -61,11 +63,16 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         if (StrUtil.isBlank(token) || !StrUtil.startWithIgnoreCase(token, AuthConstant.JWT_PREFIX)) {
             return chain.filter(exchange);
         }
-        //TODO 解析JWT获取jti，以jti为key判断redis的黑名单列表是否存在，存在则拦截访问
-        token = StrUtil.replaceIgnoreCase(token, AuthConstant.JWT_PREFIX, Strings.EMPTY);
-        String payload = StrUtil.toString(JWSObject.parse(token).getPayload());
+
+        token = token.replaceFirst(AuthConstant.JWT_PREFIX, Strings.EMPTY);
+        // 解析JWT获取jti，以jti为key判断是否为系统认可的token
+        Map<String, Object> payloadMap = JWSObject.parse(token).getPayload().toJSONObject();
+        if(redisTemplate.opsForValue().get(payloadMap.get("jti")) == null) {
+            return Mono.defer(() -> Mono.just(exchangeResponse))
+                    .flatMap(response -> ResponseUtil.writeErrorInfo(response, ResultCode.TOKEN_INVALID_OR_EXPIRED));
+        }
         request = request.mutate()
-                .header(AuthConstant.JWT_PAYLOAD_KEY, URLEncoder.encode(payload, "UTF-8"))
+                .header(AuthConstant.JWT_PAYLOAD_KEY, URLEncoder.encode(payloadMap.toString(), "UTF-8"))
                 .build();
         exchange = exchange.mutate().request(request).build();
         return chain.filter(exchange);
