@@ -16,4 +16,6 @@ public interface RedisNameSpace {
     String VIEW_COUNT_PREFIX = "view:count:";
     // 组成验证码的汉字集合
     String VERIFY_WORD_SET = "verifyWord:set:";
+    // 用户有效的jti集合
+    String JTI_PREFIX = "jti:";
 }
