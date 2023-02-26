@@ -30,11 +30,6 @@ public enum ResultCode implements ResultDetail {
     NOT_FOUND(404, "资源不存在"),
 
     /**
-     * 需要进行身份验证
-     */
-    NEED_VERIFY(701, "需要进行身份验证"),
-
-    /**
      * 账号封禁中
      */
     BANED(601, "账号封禁中"),
