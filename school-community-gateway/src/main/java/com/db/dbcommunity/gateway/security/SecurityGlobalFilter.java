@@ -2,9 +2,7 @@ package com.db.dbcommunity.gateway.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.db.dbcommunity.common.api.ResultCode;
-import com.db.dbcommunity.common.constant.AuthConstant;
-import com.db.dbcommunity.common.constant.GlobalConstant;
-import com.db.dbcommunity.common.constant.SecurityConstant;
+import com.db.dbcommunity.common.constant.*;
 import com.db.dbcommunity.gateway.util.ResponseUtil;
 import com.db.dbcommunity.gateway.util.UrlPatternUtil;
 import com.nimbusds.jose.JWSObject;
@@ -32,7 +30,7 @@ import java.util.Map;
 public class SecurityGlobalFilter implements GlobalFilter, Ordered {
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @SneakyThrows
     @Override
@@ -67,7 +65,9 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         token = token.replaceFirst(AuthConstant.JWT_PREFIX, Strings.EMPTY);
         // 解析JWT获取jti，以jti为key判断是否为系统认可的token
         Map<String, Object> payloadMap = JWSObject.parse(token).getPayload().toJSONObject();
-        if(redisTemplate.opsForValue().get(payloadMap.get("jti")) == null) {
+        String key = RedisNameSpace.JTI_PREFIX + payloadMap.get("userId");
+        String jti = (String) payloadMap.get("jti");
+        if(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, jti))) {
             return Mono.defer(() -> Mono.just(exchangeResponse))
                     .flatMap(response -> ResponseUtil.writeErrorInfo(response, ResultCode.TOKEN_INVALID_OR_EXPIRED));
         }

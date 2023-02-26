@@ -32,6 +32,7 @@ import java.util.Map;
 @Slf4j
 @ConfigurationProperties(prefix = "security")
 public class ResourceServerManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+
     private final RedisTemplate redisTemplate;
 
     @Setter
