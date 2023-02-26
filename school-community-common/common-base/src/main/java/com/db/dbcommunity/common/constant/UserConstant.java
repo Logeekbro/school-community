@@ -6,4 +6,7 @@ public interface UserConstant {
 
     // 普通用户的角色id
     Integer DEFAULT_USER_ROLE_ID = 10;
+
+    // 每个账号允许同时登录的客户端数量
+    short MAX_CLIENT_COUNT = 5;
 }
