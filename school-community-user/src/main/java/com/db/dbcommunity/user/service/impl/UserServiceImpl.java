@@ -1,6 +1,8 @@
 package com.db.dbcommunity.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.db.dbcommunity.common.constant.RedisNameSpace;
+import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.enums.DataChangeType;
@@ -54,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                     dataChangeCall(DataChangeType.UPDATE_PASSWORD.getDesc(), () -> this.baseMapper.updateById(user) > 0);
             if(result) {
                 // 登出账号
-                logout(UserContext.getCurrentUserJti());
+                logout(UserContext.getCurrentUserJti(), UserContext.getCurrentUserId());
             }
             return result;
         }
@@ -65,14 +67,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public boolean logout(String jti) {
-        return Boolean.TRUE.equals(redisTemplate.delete(jti));
+    public boolean logout(String jti, Long userId) {
+        return redisTemplate.opsForSet().remove(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
     }
 
     @Override
-    public boolean login(String jti) {
-        redisTemplate.opsForValue().set(jti, "");
-        return true;
+    public boolean login(String jti, Long userId) {
+        if(redisTemplate.opsForSet().size(RedisNameSpace.JTI_PREFIX + userId) >= UserConstant.MAX_CLIENT_COUNT) {
+            // 如果登录的客户端数量超出限制，则移除第一个客户端的jti
+            redisTemplate.opsForSet().pop(RedisNameSpace.JTI_PREFIX + userId);
+        }
+        return redisTemplate.opsForSet().add(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
     }
 }
 

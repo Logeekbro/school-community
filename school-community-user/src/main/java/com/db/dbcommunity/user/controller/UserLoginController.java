@@ -17,8 +17,8 @@ public class UserLoginController {
      * 将token中的jti注册到系统中
      */
     @PostMapping("/login")
-    public R<Void> login(@RequestParam String jti) {
-        return userService.login(jti) ? R.success() : R.failed();
+    public R<Void> login(@RequestParam String jti, @RequestParam Long userId) {
+        return userService.login(jti, userId) ? R.success() : R.failed();
     }
 
     // TODO 方案完善中
@@ -33,6 +33,6 @@ public class UserLoginController {
      */
     @DeleteMapping("/logout")
     public R<Void> logout() {
-        return userService.logout(UserContext.getCurrentUserJti()) ? R.success() : R.failed();
+        return userService.logout(UserContext.getCurrentUserJti(), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
 }

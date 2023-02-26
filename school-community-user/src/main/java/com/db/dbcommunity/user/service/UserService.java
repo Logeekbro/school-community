@@ -34,10 +34,10 @@ public interface UserService extends IService<User> {
     /**
      * 用户退出登录
      */
-    boolean logout(String jti);
+    boolean logout(String jti, Long userId);
 
     /**
      * 将jti注册到系统中
      */
-    boolean login(String jti);
+    boolean login(String jti, Long userId);
 }
