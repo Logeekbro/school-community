@@ -24,4 +24,12 @@ class SchoolCommunityUserApplicationTests {
         redisTemplate.delete("qwe");
     }
 
+    @Test
+    void testRedisSet() {
+//        Boolean member = redisTemplate.opsForSet().isMember("qwjughe", "qwe");
+//        System.out.println(member);
+        Long gwijfqwd = redisTemplate.opsForSet().size("gwijfqwd");
+        System.out.println(gwijfqwd);
+    }
+
 }
