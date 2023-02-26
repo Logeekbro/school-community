@@ -29,10 +29,19 @@ public class UserLoginController {
 
     /**
      * 退出登录
-     * @return
      */
     @DeleteMapping("/logout")
     public R<Void> logout() {
         return userService.logout(UserContext.getCurrentUserJti(), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
+
+    /**
+     * AdminAPI
+     * 封禁用户
+     */
+    @PutMapping("/ban/{userId}")
+    public R<Void> ban(@PathVariable Long userId) {
+        return userService.ban(userId) ? R.success() : R.failed();
+    }
+
 }

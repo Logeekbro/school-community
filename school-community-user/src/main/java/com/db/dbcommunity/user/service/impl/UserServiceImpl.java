@@ -79,6 +79,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return redisTemplate.opsForSet().add(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
     }
+
+    @Override
+    public boolean ban(Long userId) {
+        // 删除jti集合
+        boolean redisDelete = Boolean.TRUE.equals(redisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId));
+        // 改变status字段
+        User user = new User();
+        user.setUserId(userId);
+        user.setStatus(1);
+        boolean mysqlDelete = dataChangeCall(DataChangeType.BAN_USER.getDesc(), () -> this.baseMapper.updateById(user) > 0);
+        return redisDelete && mysqlDelete;
+    }
 }
 
 

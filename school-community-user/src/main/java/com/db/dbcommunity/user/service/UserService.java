@@ -40,4 +40,9 @@ public interface UserService extends IService<User> {
      * 将jti注册到系统中
      */
     boolean login(String jti, Long userId);
+
+    /**
+     * 封禁用户
+     */
+    boolean ban(Long userId);
 }
