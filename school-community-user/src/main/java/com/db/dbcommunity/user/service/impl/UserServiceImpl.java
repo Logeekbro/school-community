@@ -1,14 +1,17 @@
 package com.db.dbcommunity.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.common.constant.RedisNameSpace;
 import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.common.exception.ApiAsserts;
+import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.enums.DataChangeType;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
+import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 import com.db.dbcommunity.user.service.UserService;
 import com.db.dbcommunity.user.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -90,6 +93,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setStatus(1);
         boolean mysqlDelete = dataChangeCall(DataChangeType.BAN_USER.getDesc(), () -> this.baseMapper.updateById(user) > 0);
         return redisDelete && mysqlDelete;
+    }
+
+    @Override
+    public boolean register(UserRegisterVO vo) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, vo.getUsername()).or().eq(User::getEmail, vo.getEmail());
+        if(this.baseMapper.exists(queryWrapper)) ApiAsserts.fail("用户名或邮箱已存在");
+        User user = MyBeanUtil.copyProps(vo, User.class);
+        user.setPassword(new BCryptPasswordEncoder().encode(vo.getPassword()));
+        return dataChangeCall(DataChangeType.USER_REGISTER.getDesc(), () -> this.baseMapper.insert(user) > 0);
     }
 }
 

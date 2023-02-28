@@ -4,6 +4,7 @@ import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
+import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 
 /**
 * @author bin
@@ -45,4 +46,9 @@ public interface UserService extends IService<User> {
      * 封禁用户
      */
     boolean ban(Long userId);
+
+    /**
+     * 账号注册
+     */
+    boolean register(UserRegisterVO vo);
 }

@@ -2,7 +2,9 @@ package com.db.dbcommunity.user.controller;
 
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.util.UserContext;
+import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 import com.db.dbcommunity.user.service.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,10 +23,13 @@ public class UserLoginController {
         return userService.login(jti, userId) ? R.success() : R.failed();
     }
 
-    // TODO 方案完善中
+
+    /**
+     * 账号注册
+     */
     @PostMapping("/register")
-    public R register() {
-        return null;
+    public R<Void> register(@RequestBody @Validated UserRegisterVO vo) {
+        return userService.register(vo) ? R.success("注册成功") : R.failed("注册失败");
     }
 
     /**
