@@ -64,6 +64,11 @@ public class R<T> implements Serializable {
         return new R<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
     }
 
+
+    public static <T> R<T> success(String message) {
+        return new R<T>(ResultCode.SUCCESS.getCode(), message, null);
+    }
+
     /**
      * 成功
      *
