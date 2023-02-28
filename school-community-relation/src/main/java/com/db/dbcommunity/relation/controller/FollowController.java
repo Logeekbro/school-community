@@ -2,6 +2,7 @@ package com.db.dbcommunity.relation.controller;
 
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.constant.UserConstant;
+import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.relation.service.FollowService;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,8 @@ public class FollowController {
      */
     @PostMapping("/{beFollowUserId}")
     public R<Void> addFollowRelation(@PathVariable Long beFollowUserId) {
-        return followService.addFollow(UserContext.getCurrentUserId(), beFollowUserId) ? R.success() : R.failed();
+        return followService
+                .changeFollow(UserContext.getCurrentUserId(), beFollowUserId, true) ? R.success() : R.failed();
     }
 
     /**
@@ -29,6 +31,17 @@ public class FollowController {
      */
     @DeleteMapping("/{beFollowUserId}")
     public R<Void> deleteFollowRelation(@PathVariable Long beFollowUserId) {
-        return followService.deleteFollow(UserContext.getCurrentUserId(), beFollowUserId) ? R.success() : R.failed();
+        return followService
+                .changeFollow(UserContext.getCurrentUserId(), beFollowUserId, false) ? R.success() : R.failed();
+    }
+
+    /**
+     * 查询是否关注某个用户
+     */
+    @GetMapping("/check/{beFollowUserId}")
+    public R<SingleKeyVO> checkIsFollow(@PathVariable Long beFollowUserId) {
+        boolean result = followService.isFollow(UserContext.getCurrentUserId(), beFollowUserId);
+        SingleKeyVO singleKeyVO = new SingleKeyVO(result);
+        return R.success(singleKeyVO);
     }
 }

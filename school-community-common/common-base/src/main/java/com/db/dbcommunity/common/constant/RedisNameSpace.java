@@ -18,4 +18,6 @@ public interface RedisNameSpace {
     String VERIFY_WORD_SET = "verifyWord:set:";
     // 用户有效的jti集合
     String JTI_PREFIX = "jti:";
+    // 关注列表前缀
+    String FOLLOW_PREFIX = "follow:";
 }
