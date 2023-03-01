@@ -20,4 +20,6 @@ public interface RedisNameSpace {
     String JTI_PREFIX = "jti:";
     // 关注列表前缀
     String FOLLOW_PREFIX = "follow:";
+    // 粉丝列表前缀
+    String FANS_PREFIX = "fans:";
 }
