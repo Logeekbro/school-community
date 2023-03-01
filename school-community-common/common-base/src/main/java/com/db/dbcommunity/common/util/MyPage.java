@@ -1,5 +1,6 @@
 package com.db.dbcommunity.common.util;
 
+import java.util.Collection;
 import java.util.List;
 
 public class MyPage<T> {
@@ -10,7 +11,7 @@ public class MyPage<T> {
 
     private Long total;
 
-    private List<T> records;
+    private Collection<T> records;
 
     public MyPage(Long current, Short size, Long total) {
         this.current = current < 1 ? 1 : current;
@@ -46,11 +47,11 @@ public class MyPage<T> {
         this.total = total;
     }
 
-    public List<T> getRecords() {
+    public Collection<T> getRecords() {
         return records;
     }
 
-    public void setRecords(List<T> records) {
+    public void setRecords(Collection<T> records) {
         this.records = records;
     }
 }
