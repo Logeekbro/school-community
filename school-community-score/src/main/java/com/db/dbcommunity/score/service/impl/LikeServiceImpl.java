@@ -61,6 +61,7 @@ public class LikeServiceImpl implements LikeService {
                 // 类型不匹配则直接返回0
                 return 0L;
         }
-        return stringRedisTemplate.opsForZSet().score(key, id.toString()).longValue();
+        Double score = stringRedisTemplate.opsForZSet().score(key, id.toString());
+        return score != null ? score.longValue() : 0L;
     }
 }
