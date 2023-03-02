@@ -22,4 +22,8 @@ public interface RedisNameSpace {
     String FOLLOW_PREFIX = "follow:";
     // 粉丝列表前缀
     String FANS_PREFIX = "fans:";
+    // 文章点赞状态前缀
+    String ARTICLE_LIKE_STATUS_PREFIX = "article:like:";
+    // 文章点赞数前缀
+    String ARTICLE_LIKE_COUNT = "article:likeCount:";
 }
