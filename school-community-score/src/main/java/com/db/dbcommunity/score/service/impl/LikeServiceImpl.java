@@ -26,8 +26,7 @@ public class LikeServiceImpl implements LikeService {
                 // 类型不匹配则直接返回false
                 return false;
         }
-        Boolean status = stringRedisTemplate.opsForValue().getBit(statusKey, userId);
-        if (Boolean.TRUE.equals(status) ^ isLike) {
+        if (isLike(type, id, userId) ^ isLike) {
             // bitmap修改点赞状态
             stringRedisTemplate.opsForValue().setBit(statusKey, userId, isLike);
             // zset中修改分数(点赞数)
@@ -35,5 +34,19 @@ public class LikeServiceImpl implements LikeService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isLike(String type, Long id, Long currentUserId) {
+        String key;
+        switch (type) {
+            case "article":
+                key = RedisNameSpace.ARTICLE_LIKE_STATUS_PREFIX + id;
+                break;
+            default:
+                // 类型不匹配则直接返回false
+                return false;
+        }
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(key, currentUserId));
     }
 }
