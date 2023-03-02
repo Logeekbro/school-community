@@ -49,4 +49,18 @@ public class LikeServiceImpl implements LikeService {
         }
         return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(key, currentUserId));
     }
+
+    @Override
+    public Long getLikeCount(String type, Long id) {
+        String key;
+        switch (type) {
+            case "article":
+                key = RedisNameSpace.ARTICLE_LIKE_COUNT;
+                break;
+            default:
+                // 类型不匹配则直接返回0
+                return 0L;
+        }
+        return stringRedisTemplate.opsForZSet().score(key, id).longValue();
+    }
 }

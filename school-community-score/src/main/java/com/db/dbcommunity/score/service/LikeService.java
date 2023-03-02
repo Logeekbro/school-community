@@ -12,4 +12,9 @@ public interface LikeService {
      * 查询是否点赞
      */
     boolean isLike(String type, Long id, Long currentUserId);
+
+    /**
+     * 获取点赞数
+     */
+    Long getLikeCount(String type, Long id);
 }

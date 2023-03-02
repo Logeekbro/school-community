@@ -46,4 +46,13 @@ public class LikeController {
         boolean result = likeService.isLike(type, id, UserContext.getCurrentUserId());
         return R.success(new SingleKeyVO(result));
     }
+
+    /**
+     * 查询点赞数
+     */
+    @GetMapping("/count/{type}/id/{id}")
+    public R<SingleKeyVO> getLikeCount(@PathVariable String type, @PathVariable Long id) {
+        Long result = likeService.getLikeCount(type, id);
+        return R.success(new SingleKeyVO(result));
+    }
 }
