@@ -26,4 +26,8 @@ public interface RedisNameSpace {
     String ARTICLE_LIKE_STATUS_PREFIX = "article:like:";
     // 文章点赞数前缀
     String ARTICLE_LIKE_COUNT = "article:likeCount:";
+    // 文章浏览状态前缀
+    String ARTICLE_VISIT_STATUS = "article:visit:";
+    // 文章浏览量前缀
+    String ARTICLE_VISIT_COUNT = "article:visitCount:";
 }
