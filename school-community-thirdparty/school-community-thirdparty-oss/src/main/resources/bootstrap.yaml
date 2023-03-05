@@ -14,3 +14,6 @@ spring:
         shared-configs[1]:
           data-id: private-key.yaml
           refresh: true
+        shared-configs[2]:
+          data-id: dbcommunity-thirdparty-oss.yaml
+          refresh: true
