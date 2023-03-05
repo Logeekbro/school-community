@@ -8,4 +8,9 @@ public interface VisitService {
      * @param articleId 被浏览的文章id
      */
     boolean handleVisit(Long currentUserId, Long articleId);
+
+    /**
+     * 根据文章id获取文章浏览量
+     */
+    Long getVisitCountByArticleId(Long articleId);
 }

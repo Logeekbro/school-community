@@ -37,4 +37,10 @@ public class VisitServiceImpl implements VisitService {
         }
         return true;
     }
+
+    @Override
+    public Long getVisitCountByArticleId(Long articleId) {
+        Double score = stringRedisTemplate.opsForZSet().score(RedisNameSpace.ARTICLE_VISIT_COUNT, articleId.toString());
+        return score != null ? score.longValue() : 0L;
+    }
 }
