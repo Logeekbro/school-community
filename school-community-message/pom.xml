@@ -10,29 +10,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>school-community-message</artifactId>
+    <packaging>pom</packaging>
 
     <name>school-community-message</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+    <modules>
+        <module>message-api</module>
+        <module>message-boot</module>
+    </modules>
 
     <dependencies>
         <dependency>
-            <groupId>com.db.dbcommunity</groupId>
-            <artifactId>common-base</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.db.dbcommunity</groupId>
-            <artifactId>common-web</artifactId>
-            <version>1.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,21 +33,4 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
