@@ -24,7 +24,7 @@ public interface HistoryMapper extends BaseMapper<History> {
     @Select("SELECT DATE(create_time) FROM tb_history " +
             "WHERE DATE(create_time) < #{date} AND user_id=#{userId} AND deleted=0 " +
             "ORDER BY create_time DESC LIMIT 1")
-    String selectBeforeDate(Long currentUserId, String targetDate);
+    String selectBeforeDate(@Param("userId") Long currentUserId, @Param("date") String targetDate);
 }
 
 
