@@ -2,6 +2,7 @@ package com.db.dbcommunity.visit.controller;
 
 
 import com.db.dbcommunity.common.api.R;
+import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.visit.model.vo.HistoryWithDateVO;
 import com.db.dbcommunity.visit.service.HistoryService;
@@ -46,7 +47,8 @@ public class HistoryController {
      * 删除用户的所有历史记录
      */
     @DeleteMapping("/all")
-    public R<Void> deleteAllHistoryByUserId() {
-        return historyService.deleteAllHistoryByUserId(UserContext.getCurrentUserId()) ? R.success() : R.failed();
+    public R<SingleKeyVO> deleteAllHistoryByUserId() {
+        int count = historyService.deleteAllHistoryByUserId(UserContext.getCurrentUserId());
+        return R.success(new SingleKeyVO(count));
     }
 }

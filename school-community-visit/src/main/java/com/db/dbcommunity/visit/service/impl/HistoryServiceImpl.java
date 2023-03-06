@@ -47,10 +47,10 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History>
     }
 
     @Override
-    public boolean deleteAllHistoryByUserId(Long currentUserId) {
+    public int deleteAllHistoryByUserId(Long currentUserId) {
         LambdaQueryWrapper<History> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(History::getUserId, currentUserId);
-        return this.baseMapper.delete(queryWrapper) > 0;
+        return this.baseMapper.delete(queryWrapper);
     }
 }
 
