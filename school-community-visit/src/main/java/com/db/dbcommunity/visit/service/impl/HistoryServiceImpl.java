@@ -2,9 +2,13 @@ package com.db.dbcommunity.visit.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.visit.model.entity.History;
+import com.db.dbcommunity.visit.model.vo.HistoryWithDateVO;
+import com.db.dbcommunity.visit.model.vo.UserHistoryVO;
 import com.db.dbcommunity.visit.service.HistoryService;
 import com.db.dbcommunity.visit.mapper.HistoryMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author bin
@@ -21,6 +25,16 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History>
         history.setUserId(currentUserId);
         history.setArticleId(articleId);
         return this.baseMapper.insert(history) > 0;
+    }
+
+    @Override
+    public HistoryWithDateVO getUserHistoryByDate(Long currentUserId, String targetDate) {
+        List<UserHistoryVO> vos = this.baseMapper.selectUserHistoryByDate(currentUserId, targetDate);
+        HistoryWithDateVO vo = new HistoryWithDateVO();
+        vo.setTargetDate(targetDate);
+        vo.setRecords(vos);
+        vo.setBeforeDate(this.baseMapper.selectBeforeDate(currentUserId, targetDate));
+        return vo;
     }
 }
 

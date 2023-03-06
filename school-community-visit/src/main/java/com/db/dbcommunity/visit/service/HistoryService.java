@@ -2,6 +2,7 @@ package com.db.dbcommunity.visit.service;
 
 import com.db.dbcommunity.visit.model.entity.History;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.db.dbcommunity.visit.model.vo.HistoryWithDateVO;
 
 /**
 * @author bin
@@ -14,4 +15,9 @@ public interface HistoryService extends IService<History> {
      * 保存浏览记录
      */
     boolean add(Long currentUserId, Long articleId);
+
+    /**
+     * 根据日期获取用户历史记录
+     */
+    HistoryWithDateVO getUserHistoryByDate(Long currentUserId, String targetDate);
 }

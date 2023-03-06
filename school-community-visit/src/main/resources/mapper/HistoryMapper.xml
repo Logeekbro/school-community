@@ -17,4 +17,10 @@
         history_id,user_id,article_id,
         create_time,update_time,deleted
     </sql>
+    <select id="selectUserHistoryByDate" resultType="com.db.dbcommunity.visit.model.vo.UserHistoryVO">
+        SELECT history_id,article_id,create_time FROM tb_history
+        WHERE DATE(create_time)=#{targetDate} AND user_id=#{userId} AND deleted=0
+        ORDER BY create_time DESC
+    </select>
+
 </mapper>
