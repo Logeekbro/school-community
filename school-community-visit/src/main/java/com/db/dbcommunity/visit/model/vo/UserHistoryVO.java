@@ -1,8 +1,12 @@
 package com.db.dbcommunity.visit.model.vo;
 
+import lombok.Data;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserHistoryVO {
+@Data
+public class UserHistoryVO implements Serializable {
 
     private Long historyId;
 
