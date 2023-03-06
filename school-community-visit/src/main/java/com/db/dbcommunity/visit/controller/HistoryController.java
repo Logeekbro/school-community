@@ -41,4 +41,12 @@ public class HistoryController {
     public R<Void> deleteHistoryById(@RequestParam Long historyId) {
         return historyService.deleteHistoryById(UserContext.getCurrentUserId(), historyId) ? R.success() : R.failed();
     }
+
+    /**
+     * 删除用户的所有历史记录
+     */
+    @DeleteMapping("/all")
+    public R<Void> deleteAllHistoryByUserId() {
+        return historyService.deleteAllHistoryByUserId(UserContext.getCurrentUserId()) ? R.success() : R.failed();
+    }
 }

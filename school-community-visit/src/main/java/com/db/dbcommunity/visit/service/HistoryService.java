@@ -25,4 +25,9 @@ public interface HistoryService extends IService<History> {
      * 根据id删除历史记录
      */
     boolean deleteHistoryById(Long currentUserId, Long historyId);
+
+    /**
+     * 删除用户的所有历史记录
+     */
+    boolean deleteAllHistoryByUserId(Long currentUserId);
 }
