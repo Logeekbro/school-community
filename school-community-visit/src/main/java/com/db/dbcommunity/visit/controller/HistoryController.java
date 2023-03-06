@@ -33,4 +33,12 @@ public class HistoryController {
         HistoryWithDateVO result = historyService.getUserHistoryByDate(UserContext.getCurrentUserId(), targetDate);
         return R.success(result);
     }
+
+    /**
+     * 根据id删除浏览记录
+     */
+    @DeleteMapping("/id")
+    public R<Void> deleteHistoryById(@RequestParam Long historyId) {
+        return historyService.deleteHistoryById(UserContext.getCurrentUserId(), historyId) ? R.success() : R.failed();
+    }
 }

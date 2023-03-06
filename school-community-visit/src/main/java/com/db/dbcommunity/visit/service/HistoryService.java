@@ -20,4 +20,9 @@ public interface HistoryService extends IService<History> {
      * 根据日期获取用户历史记录
      */
     HistoryWithDateVO getUserHistoryByDate(Long currentUserId, String targetDate);
+
+    /**
+     * 根据id删除历史记录
+     */
+    boolean deleteHistoryById(Long currentUserId, Long historyId);
 }

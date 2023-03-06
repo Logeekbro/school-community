@@ -1,5 +1,6 @@
 package com.db.dbcommunity.visit.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.visit.model.entity.History;
 import com.db.dbcommunity.visit.model.vo.HistoryWithDateVO;
@@ -35,6 +36,14 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History>
         vo.setRecords(vos);
         vo.setBeforeDate(this.baseMapper.selectBeforeDate(currentUserId, targetDate));
         return vo;
+    }
+
+    @Override
+    public boolean deleteHistoryById(Long currentUserId, Long historyId) {
+        LambdaQueryWrapper<History> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(History::getUserId, currentUserId);
+        queryWrapper.eq(History::getHistoryId, historyId);
+        return this.baseMapper.delete(queryWrapper) > 0;
     }
 }
 
