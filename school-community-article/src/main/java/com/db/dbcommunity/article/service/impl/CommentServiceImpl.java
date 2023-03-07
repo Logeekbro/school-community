@@ -1,5 +1,6 @@
 package com.db.dbcommunity.article.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Comment;
 import com.db.dbcommunity.article.model.vo.CommentCreateVO;
@@ -23,6 +24,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         comment.setContent(vo.getContent());
         comment.setUserId(currentUserId);
         return this.baseMapper.insert(comment) > 0;
+    }
+
+    @Override
+    public boolean deleteById(Long currentUserId, Long commentId) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getCommentId, commentId);
+        queryWrapper.eq(Comment::getUserId, currentUserId);
+        return this.baseMapper.delete(queryWrapper) > 0;
     }
 }
 

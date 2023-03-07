@@ -23,4 +23,25 @@ public class CommentController {
     public R<Void> addComment(@RequestBody CommentCreateVO vo) {
         return commentService.createComment(UserContext.getCurrentUserId(), vo) ? R.success() : R.failed();
     }
+
+    /**
+     * 用户删除自己的评论
+     */
+    @DeleteMapping("/self")
+    public R<Void> deleteSelfComment(@RequestParam Long commentId) {
+        return commentService.deleteById(UserContext.getCurrentUserId(), commentId) ? R.success() : R.failed();
+    }
+
+    /**
+     * 删除用户的评论，需要管理员权限
+     */
+    @DeleteMapping("/user")
+    public R<Void> deleteUserComment(@RequestParam Long userId, @RequestParam Long commentId) {
+        return commentService.deleteById(userId, commentId) ? R.success() : R.failed();
+    }
+
+
+
+
+
 }

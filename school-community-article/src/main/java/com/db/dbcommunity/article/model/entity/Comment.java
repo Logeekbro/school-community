@@ -22,7 +22,7 @@ public class Comment extends BaseEntity implements Serializable {
     /**
      * 主键，评论id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long commentId;
 
     /**

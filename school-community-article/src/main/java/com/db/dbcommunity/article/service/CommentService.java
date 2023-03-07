@@ -15,4 +15,9 @@ public interface CommentService extends IService<Comment> {
      * 添加评论
      */
     boolean createComment(Long currentUserId, CommentCreateVO vo);
+
+    /**
+     * 根据id删除评论
+     */
+    boolean deleteById(Long currentUserId, Long commentId);
 }
