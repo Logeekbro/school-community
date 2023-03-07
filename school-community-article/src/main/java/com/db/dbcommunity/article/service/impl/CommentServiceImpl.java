@@ -2,6 +2,7 @@ package com.db.dbcommunity.article.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Comment;
+import com.db.dbcommunity.article.model.vo.CommentCreateVO;
 import com.db.dbcommunity.article.service.CommentService;
 import com.db.dbcommunity.article.mapper.CommentMapper;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,14 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     implements CommentService{
 
+    @Override
+    public boolean createComment(Long currentUserId, CommentCreateVO vo) {
+        Comment comment = new Comment();
+        comment.setArticleId(vo.getArticleId());
+        comment.setContent(vo.getContent());
+        comment.setUserId(currentUserId);
+        return this.baseMapper.insert(comment) > 0;
+    }
 }
 
 
