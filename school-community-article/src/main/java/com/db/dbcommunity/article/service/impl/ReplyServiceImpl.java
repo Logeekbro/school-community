@@ -44,9 +44,7 @@ public class ReplyServiceImpl extends ServiceImpl<ReplyMapper, Reply>
 
     @Override
     public MyPage<ReplyInListVO> getReplyListByCommentId(Long commentId, Long current, Short size) {
-        LambdaQueryWrapper<Reply> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Reply::getCommentId, commentId);
-        Long total = this.baseMapper.selectCount(queryWrapper);
+        Long total = getReplyCountByCommentId(commentId);
         MyPage<ReplyInListVO> page = new MyPage<>(current, size, total);
         List<ReplyInListVO> list = this.baseMapper.selectReplyListByCommentId(commentId, page.offset(), page.getSize());
         page.setRecords(list);
