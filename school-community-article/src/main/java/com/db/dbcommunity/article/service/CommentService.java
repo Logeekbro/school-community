@@ -3,6 +3,8 @@ package com.db.dbcommunity.article.service;
 import com.db.dbcommunity.article.model.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.article.model.vo.CommentCreateVO;
+import com.db.dbcommunity.article.model.vo.CommentInListVO;
+import com.db.dbcommunity.common.util.MyPage;
 
 /**
 * @author bin
@@ -20,4 +22,9 @@ public interface CommentService extends IService<Comment> {
      * 根据id删除评论
      */
     boolean deleteById(Long currentUserId, Long commentId);
+
+    /**
+     * 获取文章评论列表
+     */
+    MyPage<CommentInListVO> getCommentListByArticleId(Long articleId, Long current, Short size);
 }

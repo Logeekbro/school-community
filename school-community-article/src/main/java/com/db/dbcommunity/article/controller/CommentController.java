@@ -1,8 +1,10 @@
 package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.model.vo.CommentCreateVO;
+import com.db.dbcommunity.article.model.vo.CommentInListVO;
 import com.db.dbcommunity.article.service.CommentService;
 import com.db.dbcommunity.common.api.R;
+import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +43,15 @@ public class CommentController {
     }
 
 
-
-
+    /**
+     * 获取文章的评论列表
+     */
+    @GetMapping("/list")
+    public R<MyPage<CommentInListVO>> getCommentList(@RequestParam Long articleId,
+                                                     @RequestParam Long current,
+                                                     @RequestParam Short size) {
+        MyPage<CommentInListVO> page = commentService.getCommentListByArticleId(articleId, current, size);
+        return R.success(page);
+    }
 
 }
