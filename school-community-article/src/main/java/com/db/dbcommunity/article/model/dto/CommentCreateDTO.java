@@ -1,4 +1,4 @@
-package com.db.dbcommunity.article.model.vo;
+package com.db.dbcommunity.article.model.dto;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
-public class CommentCreateVO {
+public class CommentCreateDTO {
 
     private Long articleId;
 

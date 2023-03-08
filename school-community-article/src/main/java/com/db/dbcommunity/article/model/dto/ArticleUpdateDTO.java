@@ -1,4 +1,4 @@
-package com.db.dbcommunity.article.model.vo;
+package com.db.dbcommunity.article.model.dto;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  * 接收前端修改文章时传来的文章数据
  */
 @Data
-public class ArticleUpdateVO {
+public class ArticleUpdateDTO {
 
     /**
      * 作者的用户id

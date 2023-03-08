@@ -1,4 +1,4 @@
-package com.db.dbcommunity.article.model.vo;
+package com.db.dbcommunity.article.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleCreateVO implements Serializable {
+public class ArticleCreateDTO implements Serializable {
 
     /**
      * 作者的id
