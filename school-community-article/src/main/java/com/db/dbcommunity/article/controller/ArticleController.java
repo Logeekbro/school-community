@@ -1,5 +1,7 @@
 package com.db.dbcommunity.article.controller;
 
+import com.db.dbcommunity.article.model.dto.ArticleCreateDTO;
+import com.db.dbcommunity.article.model.dto.ArticleUpdateDTO;
 import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
@@ -11,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.Max;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class ArticleController {
      * 创建文章
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public R<SingleKeyVO> createArticle(@Validated @RequestBody ArticleCreateVO articleVO) {
+    public R<SingleKeyVO> createArticle(@Validated @RequestBody ArticleCreateDTO articleVO) {
         articleVO.setAuthorId(UserContext.getCurrentUserId());
         Long id = articleService.create(articleVO);
         SingleKeyVO vo = new SingleKeyVO(id);
@@ -35,7 +36,7 @@ public class ArticleController {
      * 更新文章
      */
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public R<Void> updateArticle(@Validated @RequestBody ArticleUpdateVO updateVO) {
+    public R<Void> updateArticle(@Validated @RequestBody ArticleUpdateDTO updateVO) {
         updateVO.setAuthorId(UserContext.getCurrentUserId());
         return articleService.update(updateVO) ? R.success() : R.failed();
     }

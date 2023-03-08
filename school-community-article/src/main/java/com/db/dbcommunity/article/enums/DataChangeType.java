@@ -9,7 +9,9 @@ public enum DataChangeType {
     UPDATE_ARTICLE(1, "更新文章"),
     DELETE_ARTICLE(2, "删除文章"),
     ARTICLE_PASS_REVIEW(3, "文章通过审核"),
-    ARTICLE_NOT_PASS_REVIEW(4, "文章未通过审核");
+    ARTICLE_NOT_PASS_REVIEW(4, "文章未通过审核"),
+    ADD_COMMENT(5, "新增评论"),
+    ADD_REPLY(6, "新增回复");
 
     private final int code;
     private final String desc;

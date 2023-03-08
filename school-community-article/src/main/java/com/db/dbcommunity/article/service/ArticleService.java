@@ -1,5 +1,7 @@
 package com.db.dbcommunity.article.service;
 
+import com.db.dbcommunity.article.model.dto.ArticleCreateDTO;
+import com.db.dbcommunity.article.model.dto.ArticleUpdateDTO;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.article.model.vo.*;
@@ -19,14 +21,14 @@ public interface ArticleService extends IService<Article> {
      * @param articleVO 创建文章需要的信息
      * @return 创建好的文章id
      */
-    Long create(ArticleCreateVO articleVO);
+    Long create(ArticleCreateDTO articleVO);
 
     /**
      * 更新文章
      * @param updateDTO 要更新的文章信息
      * @return 是否更新成功
      */
-    boolean update(ArticleUpdateVO updateDTO);
+    boolean update(ArticleUpdateDTO updateDTO);
 
     /**
      * 根据用户id获取用户发表的文章信息

@@ -2,7 +2,7 @@ package com.db.dbcommunity.article.service;
 
 import com.db.dbcommunity.article.model.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.db.dbcommunity.article.model.vo.CommentCreateVO;
+import com.db.dbcommunity.article.model.dto.CommentCreateDTO;
 import com.db.dbcommunity.article.model.vo.CommentInListVO;
 import com.db.dbcommunity.common.util.MyPage;
 
@@ -16,7 +16,7 @@ public interface CommentService extends IService<Comment> {
     /**
      * 添加评论
      */
-    boolean createComment(Long currentUserId, CommentCreateVO vo);
+    boolean createComment(Long currentUserId, CommentCreateDTO vo);
 
     /**
      * 根据id删除评论

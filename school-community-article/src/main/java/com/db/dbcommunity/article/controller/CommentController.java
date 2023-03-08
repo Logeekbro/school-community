@@ -1,6 +1,6 @@
 package com.db.dbcommunity.article.controller;
 
-import com.db.dbcommunity.article.model.vo.CommentCreateVO;
+import com.db.dbcommunity.article.model.dto.CommentCreateDTO;
 import com.db.dbcommunity.article.model.vo.CommentInListVO;
 import com.db.dbcommunity.article.service.CommentService;
 import com.db.dbcommunity.common.api.R;
@@ -22,7 +22,7 @@ public class CommentController {
      *
      */
     @PostMapping(value = "/")
-    public R<Void> addComment(@RequestBody CommentCreateVO vo) {
+    public R<Void> addComment(@RequestBody CommentCreateDTO vo) {
         return commentService.createComment(UserContext.getCurrentUserId(), vo) ? R.success() : R.failed();
     }
 

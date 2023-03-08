@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.enums.DataChangeType;
 import com.db.dbcommunity.article.enums.OrderType;
+import com.db.dbcommunity.article.model.dto.ArticleCreateDTO;
+import com.db.dbcommunity.article.model.dto.ArticleUpdateDTO;
 import com.db.dbcommunity.article.model.entity.Article;
 import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.article.thread.ServiceContext;
-import com.db.dbcommunity.article.util.MethodUtil;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.db.dbcommunity.article.util.MethodUtil.dataChangeCall;
 
@@ -39,7 +39,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Transactional
     @Override
-    public Long create(ArticleCreateVO articleVO) {
+    public Long create(ArticleCreateDTO articleVO) {
         Article article = MyBeanUtil.copyProps(articleVO, Article.class);
         // 判断文章是否需要审核
         if (articleVO.getNeedReview()) {
@@ -60,7 +60,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     }
 
     @Override
-    public boolean update(ArticleUpdateVO updateDTO) {
+    public boolean update(ArticleUpdateDTO updateDTO) {
         Article article = MyBeanUtil.copyProps(updateDTO, Article.class);
         if (updateDTO.getNeedReview()) article.setStatus(1);
         return dataChangeCall(DataChangeType.UPDATE_ARTICLE, () -> this.baseMapper.updateById(article) > 0);

@@ -1,5 +1,6 @@
 package com.db.dbcommunity.article.service;
 
+import com.db.dbcommunity.article.model.dto.ReplyCreateDTO;
 import com.db.dbcommunity.article.model.entity.Reply;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ReplyService extends IService<Reply> {
 
+    /**
+     * 添加回复
+     */
+    boolean saveReply(Long currentUserId, ReplyCreateDTO dto);
 }
