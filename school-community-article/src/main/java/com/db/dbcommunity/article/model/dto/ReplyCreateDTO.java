@@ -12,6 +12,7 @@ public class ReplyCreateDTO {
     private Long commentId;
 
     private Long target;
+
     @NotEmpty(message = "回复内容不能为空")
     private String content;
 }

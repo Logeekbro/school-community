@@ -22,7 +22,7 @@ public class Reply extends BaseEntity implements Serializable {
     /**
      * 主键，回复id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long replyId;
 
     /**
