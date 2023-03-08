@@ -9,5 +9,6 @@ mongodb4.x
 nacos2.0.2   
 nginx1.10   
 elastic search 版本待定   
-kibana 与es一致
+kibana 与es一致   
+rabbitmq3
 
