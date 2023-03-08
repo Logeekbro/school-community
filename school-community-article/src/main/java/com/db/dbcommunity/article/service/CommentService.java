@@ -27,4 +27,9 @@ public interface CommentService extends IService<Comment> {
      * 获取文章评论列表
      */
     MyPage<CommentInListVO> getCommentListByArticleId(Long articleId, Long current, Short size);
+
+    /**
+     * 根据文章id获取文章的评论数
+     */
+    Long getCommentCountByArticleId(Long articleId);
 }

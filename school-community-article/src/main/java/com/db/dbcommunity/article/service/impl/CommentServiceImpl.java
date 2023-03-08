@@ -40,13 +40,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
 
     @Override
     public MyPage<CommentInListVO> getCommentListByArticleId(Long articleId, Long current, Short size) {
-        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId, articleId);
-        Long total = this.baseMapper.selectCount(queryWrapper);
+        Long total = getCommentCountByArticleId(articleId);
         MyPage<CommentInListVO> page = new MyPage<>(current, size, total);
         List<CommentInListVO> list = this.baseMapper.selectCommentList(articleId, page.offset(), page.getSize());
         page.setRecords(list);
         return page;
+    }
+
+    @Override
+    public Long getCommentCountByArticleId(Long articleId) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getArticleId, articleId);
+        return this.baseMapper.selectCount(queryWrapper);
     }
 }
 

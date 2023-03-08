@@ -4,6 +4,7 @@ import com.db.dbcommunity.article.model.dto.CommentCreateDTO;
 import com.db.dbcommunity.article.model.vo.CommentInListVO;
 import com.db.dbcommunity.article.service.CommentService;
 import com.db.dbcommunity.common.api.R;
+import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,15 @@ public class CommentController {
                                                      @RequestParam Short size) {
         MyPage<CommentInListVO> page = commentService.getCommentListByArticleId(articleId, current, size);
         return R.success(page);
+    }
+
+    /**
+     * 获取文章评论数
+     */
+    @GetMapping("/count")
+    public R<SingleKeyVO> getCommentCount(@RequestParam Long articleId) {
+        Long count = commentService.getCommentCountByArticleId(articleId);
+        return R.success(new SingleKeyVO(count));
     }
 
 }
