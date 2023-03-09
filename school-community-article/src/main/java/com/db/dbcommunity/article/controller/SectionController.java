@@ -2,9 +2,9 @@ package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.service.SectionService;
 import com.db.dbcommunity.common.api.R;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.db.dbcommunity.common.model.vo.SingleKeyVO;
+import com.db.dbcommunity.common.util.UserContext;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,5 +26,13 @@ public class SectionController {
         return R.success(list);
     }
 
+    /**
+     * 创建分区
+     */
+    @PostMapping("/")
+    public R<SingleKeyVO> addSection(@RequestParam String sectionName) {
+        Integer sectionId = sectionService.addSection(UserContext.getCurrentUserId(), sectionName);
+        return R.success(new SingleKeyVO(sectionId));
+    }
 
 }

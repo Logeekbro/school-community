@@ -17,4 +17,9 @@ public interface SectionService extends IService<Section> {
      * 获取所有分区信息
      */
     List<Map<String, Object>> getAllSectionInfo();
+
+    /**
+     * 创建新分区
+     */
+    Integer addSection(Long currentUserId, String sectionName);
 }

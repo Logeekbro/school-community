@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.db.dbcommunity.common.model.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
@@ -14,7 +17,8 @@ import lombok.Data;
  */
 @TableName(value ="tb_section")
 @Data
-public class Section implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class Section extends BaseEntity implements Serializable {
     /**
      * 主键，分区id
      */
@@ -30,16 +34,6 @@ public class Section implements Serializable {
      * 分区的创建者id
      */
     private Long createBy;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
 
     /**
      * 逻辑删除， 0-未删除 1-已删除

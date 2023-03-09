@@ -27,6 +27,15 @@ public class SectionServiceImpl extends ServiceImpl<SectionMapper, Section>
         queryWrapper.select(Section::getSectionId, Section::getSectionName, Section::getCreateBy, Section::getCreateTime);
         return this.baseMapper.selectMaps(queryWrapper);
     }
+
+    @Override
+    public Integer addSection(Long currentUserId, String sectionName) {
+        Section section = new Section();
+        section.setSectionName(sectionName);
+        section.setCreateBy(currentUserId);
+        this.baseMapper.insert(section);
+        return section.getSectionId();
+    }
 }
 
 
