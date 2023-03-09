@@ -65,7 +65,12 @@ public enum ResultCode implements ResultDetail {
     /**
      * 请求不安全
      */
-    UN_SECURITY_REQUEST(801, "请求不安全");
+    UN_SECURITY_REQUEST(801, "请求不安全"),
+
+    /**
+     * 名称已存在
+     */
+    KEY_EXIST(901, "名称已存在");
 
 
     private final Integer code;
