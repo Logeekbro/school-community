@@ -35,4 +35,13 @@ public class SectionController {
         return R.success(new SingleKeyVO(sectionId));
     }
 
+    /**
+     * 根据分区id获取分区名称
+     */
+    @GetMapping("/name/{sectionId}")
+    public R<SingleKeyVO> getSectionNameById(@PathVariable String sectionId) {
+        String sectionName = sectionService.getSectionNameById(sectionId);
+        return R.success(new SingleKeyVO(sectionName));
+    }
+
 }

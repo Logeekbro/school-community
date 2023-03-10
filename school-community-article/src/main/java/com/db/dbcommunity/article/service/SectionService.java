@@ -22,4 +22,9 @@ public interface SectionService extends IService<Section> {
      * 创建新分区
      */
     Integer addSection(Long currentUserId, String sectionName);
+
+    /**
+     * 根据分区id获取分区名称
+     */
+    String getSectionNameById(String sectionId);
 }
