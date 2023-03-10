@@ -10,6 +10,7 @@ import java.util.Date;
 import com.db.dbcommunity.common.model.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 
@@ -18,6 +19,7 @@ import lombok.EqualsAndHashCode;
 @TableName(value ="tb_article")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class Article extends BaseEntity implements Serializable {
     /**
      * 主键，文章id
