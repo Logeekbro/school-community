@@ -98,14 +98,16 @@ public class ArticleController {
 
     /**
      * openAPI
-     * 获取最新文章
+     * 获取最新文章, 可指定分区
      *
      * @return 文章列表中需要的文章信息
      */
     @RequestMapping(value = "/latest", method = RequestMethod.GET)
-    public R<MyPage<ArticleMainInfoVO>> getLatestArticles(Long current,Short size) {
+    public R<MyPage<ArticleMainInfoVO>> getLatestArticles(@RequestParam(required = false) Integer sectionId,
+                                                          @RequestParam Long current,
+                                                          @RequestParam Short size) {
         MyPage<ArticleMainInfoVO> page =
-                articleService.getLatestArticleMainInfo(current, size);
+                articleService.getLatestArticleMainInfo(sectionId, current, size);
         return R.success(page);
     }
 
@@ -116,9 +118,11 @@ public class ArticleController {
      * @return 文章列表中需要的文章信息
      */
     @RequestMapping(value = "/popular", method = RequestMethod.GET)
-    public R<MyPage<ArticleMainInfoVO>> getPopularArticles(Long current, Short size) {
+    public R<MyPage<ArticleMainInfoVO>> getPopularArticles(@RequestParam(required = false) Integer sectionId,
+                                                           @RequestParam Long current,
+                                                           @RequestParam Short size) {
         MyPage<ArticleMainInfoVO> page =
-                articleService.getPopularArticleMainInfo(current, size);
+                articleService.getPopularArticleMainInfo(sectionId, current, size);
         return R.success(page);
     }
 

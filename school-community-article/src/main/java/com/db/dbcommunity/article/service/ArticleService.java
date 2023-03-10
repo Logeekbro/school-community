@@ -53,14 +53,14 @@ public interface ArticleService extends IService<Article> {
     ArticleDetailInfoVO getArticleDetailById(Long articleId, Long currentUserId);
 
     /**
-     * 获取最新文章
+     * 获取最新文章，可指定分区
      */
-    MyPage<ArticleMainInfoVO> getLatestArticleMainInfo(Long current, Short size);
+    MyPage<ArticleMainInfoVO> getLatestArticleMainInfo(Integer sectionId, Long current, Short size);
 
     /**
-     * 获取热门文章(判断依据：目前仅根据浏览量降序)
+     * 获取热门文章(判断依据：目前仅根据浏览量降序), 可指定分区
      */
-    MyPage<ArticleMainInfoVO> getPopularArticleMainInfo(Long current, Short size);
+    MyPage<ArticleMainInfoVO> getPopularArticleMainInfo(Integer sectionId, Long current, Short size);
 
     /**
      * 根据用户id获取用户发表的文章数量

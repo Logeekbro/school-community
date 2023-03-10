@@ -96,22 +96,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     // TODO 高频数据，需要缓存
     @Override
-    public MyPage<ArticleMainInfoVO> getLatestArticleMainInfo(Long current, Short size) {
-        Long total = this.baseMapper.selectTotal(null);
+    public MyPage<ArticleMainInfoVO> getLatestArticleMainInfo(Integer sectionId, Long current, Short size) {
+        Long total = this.baseMapper.selectTotal(new Article().setSectionId(sectionId));
         MyPage<ArticleMainInfoVO> page = new MyPage<>(current, size, total);
         List<ArticleMainInfoVO> vos =
-                this.baseMapper.selectArticleMainInfoPageWithOrder(page.offset(), page.getSize(), OrderType.CREATE_TIME_DESC);
+                this.baseMapper.selectArticleMainInfoPageWithOrder(sectionId, page.offset(), page.getSize(), OrderType.CREATE_TIME_DESC);
         page.setRecords(vos);
         return page;
     }
 
     // TODO 高频数据，需要缓存
     @Override
-    public MyPage<ArticleMainInfoVO> getPopularArticleMainInfo(Long current, Short size) {
-        Long total = this.baseMapper.selectTotal(null);
+    public MyPage<ArticleMainInfoVO> getPopularArticleMainInfo(Integer sectionId, Long current, Short size) {
+        Long total = this.baseMapper.selectTotal(new Article().setSectionId(sectionId));
         MyPage<ArticleMainInfoVO> page = new MyPage<>(current, size, total);
         List<ArticleMainInfoVO> vos =
-                this.baseMapper.selectArticleMainInfoPageWithOrder(page.offset(), page.getSize(), OrderType.VIEW_COUNT_DESC);
+                this.baseMapper.selectArticleMainInfoPageWithOrder(sectionId, page.offset(), page.getSize(), OrderType.VIEW_COUNT_DESC);
         page.setRecords(vos);
         return page;
     }

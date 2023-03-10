@@ -14,15 +14,16 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 /**
-* @author bin
-* @description 针对表【tb_article】的数据库操作Mapper
-* @createDate 2023-02-12 09:45:15
-* @Entity com.db.dbcommunity.article.model.entity.Article
-*/
+ * @author bin
+ * @description 针对表【tb_article】的数据库操作Mapper
+ * @createDate 2023-02-12 09:45:15
+ * @Entity com.db.dbcommunity.article.model.entity.Article
+ */
 public interface ArticleMapper extends BaseMapper<Article> {
 
     /**
      * 根据多种条件查询文章数量
+     *
      * @param article 将实体的非空属性作为查询条件
      * @return 查到的文章数量
      */
@@ -42,9 +43,11 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 根据排序条件分页查询 文章列表页需要的文章信息
      */
-    List<ArticleMainInfoVO> selectArticleMainInfoPageWithOrder(@Param("offset") Long offset,
+    List<ArticleMainInfoVO> selectArticleMainInfoPageWithOrder(@Param("sectionId") Integer sectionId,
+                                                               @Param("offset") Long offset,
                                                                @Param("size") Short size,
-                                                               @Param("order") OrderType order);
+                                                               @Param("order") OrderType order
+    );
 
     List<ArticleMainInfoVO> selectTopArticle(@Param("sectionId") Integer sectionId);
 
