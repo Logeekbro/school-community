@@ -3,6 +3,7 @@ package com.db.dbcommunity.search.service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch.core.DeleteByQueryResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import com.db.dbcommunity.search.common.ESConstant;
 import com.db.dbcommunity.search.document.Article;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -51,5 +53,16 @@ public class IndexService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean deleteIndex(String indexName, List<String> ids) {
+        try {
+            esClient.deleteByQuery(builder -> builder.index(indexName).query(q -> q.ids(b -> b.values(ids))));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

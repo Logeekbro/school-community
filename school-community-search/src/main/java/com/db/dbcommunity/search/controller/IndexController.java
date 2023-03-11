@@ -5,10 +5,7 @@ import com.db.dbcommunity.search.common.ESConstant;
 import com.db.dbcommunity.search.document.Article;
 import com.db.dbcommunity.search.document.User;
 import com.db.dbcommunity.search.service.IndexService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,6 +31,22 @@ public class IndexController {
     @PostMapping("/user")
     public R<Void> indexUser(@RequestBody List<User> users) {
         return indexService.index(ESConstant.USER_INDEX_NAME, users) ? R.success() : R.failed();
+    }
+
+    /**
+     * 根据id列表将文章数据从ES中删除
+     */
+    @DeleteMapping("/article")
+    public R<Void> deleteArticleIndex(@RequestBody List<String> ids) {
+        return indexService.deleteIndex(ESConstant.ARTICLE_INDEX_NAME, ids) ? R.success() : R.failed();
+    }
+
+    /**
+     * 根据id列表将用户数据从ES中删除
+     */
+    @DeleteMapping("/user")
+    public R<Void> deleteUserIndex(@RequestBody List<String> ids) {
+        return indexService.deleteIndex(ESConstant.USER_INDEX_NAME, ids) ? R.success() : R.failed();
     }
 
 }
