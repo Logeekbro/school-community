@@ -6,11 +6,14 @@ import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import com.db.dbcommunity.search.common.ESConstant;
 import com.db.dbcommunity.search.document.Article;
+import com.db.dbcommunity.search.document.EsDocument;
+import com.db.dbcommunity.search.document.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class IndexService {
@@ -20,16 +23,15 @@ public class IndexService {
     @Resource
     private ElasticsearchClient esClient;
 
-
-    public boolean indexArticle(Article[] articles) {
+    public boolean index(String indexName, List<? extends EsDocument> documents) {
         try {
             BulkRequest.Builder br = new BulkRequest.Builder();
-            for (Article article : articles) {
+            for (EsDocument document : documents) {
                 br.operations(op -> op
                         .index(idx -> idx
-                                .index(ESConstant.ARTICLE_INDEX_NAME)
-                                .id(article.getArticleId().toString())
-                                .document(article)
+                                .index(indexName)
+                                .id(document.id())
+                                .document(document)
                         )
                 );
             }
