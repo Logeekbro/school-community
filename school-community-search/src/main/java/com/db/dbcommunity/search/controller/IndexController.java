@@ -49,4 +49,20 @@ public class IndexController {
         return indexService.deleteIndex(ESConstant.USER_INDEX_NAME, ids) ? R.success() : R.failed();
     }
 
+    /**
+     * 更新文章索引
+     */
+    @PutMapping("/article")
+    public R<Void> updateArticleIndex(@RequestBody List<Article> articles) {
+        return indexService.updateIndex(ESConstant.ARTICLE_INDEX_NAME, articles) ? R.success() : R.failed();
+    }
+
+    /**
+     * 更新用户索引
+     */
+    @PutMapping("/user")
+    public R<Void> updateUserIndex(@RequestBody List<User> users) {
+        return indexService.updateIndex(ESConstant.USER_INDEX_NAME, users) ? R.success() : R.failed();
+    }
+
 }
