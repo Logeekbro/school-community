@@ -13,9 +13,13 @@ public class MyPage<T> {
 
     private Collection<T> records;
 
-    public MyPage(Long current, Short size, Long total) {
+    public MyPage(Long current, Short size) {
         this.current = current < 1 ? 1 : current;
         this.size = size < 0 ? 0 : size;
+    }
+
+    public MyPage(Long current, Short size, Long total) {
+        this(current, size);
         this.total = total;
     }
 
