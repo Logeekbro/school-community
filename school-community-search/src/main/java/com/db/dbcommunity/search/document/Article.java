@@ -1,11 +1,14 @@
 package com.db.dbcommunity.search.document;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class Article implements EsDocument {
+@Accessors(chain = true)
+public class Article implements EsDocument, Serializable {
 
     private Long articleId;
 
