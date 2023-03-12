@@ -13,6 +13,8 @@ public class User implements EsDocument{
 
     private String nickName;
 
+    private String avatar;
+
     private Long fansCount;
 
     private Date createTime;

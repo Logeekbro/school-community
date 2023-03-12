@@ -9,9 +9,13 @@ public class Article implements EsDocument {
 
     private Long articleId;
 
+    private Long authorId;
+
     private String title;
 
     private String summary;
+
+    private String mainPic;
 
     private Long viewCount;
 
