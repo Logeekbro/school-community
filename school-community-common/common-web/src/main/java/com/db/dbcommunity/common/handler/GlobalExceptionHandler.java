@@ -4,8 +4,6 @@ package com.db.dbcommunity.common.handler;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiException;
-import org.springframework.core.annotation.Order;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,14 +54,7 @@ public class GlobalExceptionHandler {
         }
     }
 
-    /**
-     * 唯一索引重复异常
-     */
-    @ExceptionHandler(DuplicateKeyException.class)
-    public R<Map<String, Object>> duplicateKeyExceptionHandler(DuplicateKeyException ex) {
-        ex.printStackTrace();
-        return R.failed(ResultCode.KEY_EXIST);
-    }
+
 
     /**
      * Spring Security校验失败时抛出的异常
