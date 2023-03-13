@@ -3,8 +3,10 @@ package com.db.dbcommunity.search.controller;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.search.document.Article;
+import com.db.dbcommunity.search.document.User;
 import com.db.dbcommunity.search.service.SearchService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,17 @@ public class SearchController {
                                         @RequestParam Integer current,
                                         @RequestParam Integer size) {
         MyPage<Article> page =  searchService.searchArticle(keyword, current, size);
+        return R.success(page);
+    }
+
+    /**
+     * 根据多条件搜索用户
+     */
+    @GetMapping("/user")
+    public R<MyPage<User>> searchUser(@RequestParam String keyword,
+                                      @RequestParam Integer current,
+                                      @RequestParam Integer size) {
+        MyPage<User> page = searchService.searchUser(keyword, current, size);
         return R.success(page);
     }
 }

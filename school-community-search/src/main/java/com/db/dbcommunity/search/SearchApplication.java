@@ -4,9 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-import javax.annotation.Resource;
-
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.db.dbcommunity.*")
 @EnableDiscoveryClient
 public class SearchApplication {
 
