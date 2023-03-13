@@ -20,9 +20,9 @@ public class Article implements EsDocument, Serializable {
 
     private String mainPic;
 
-    private Long viewCount;
+    private Long viewCount = 0L;
 
-    private Long likeCount;
+    private Long likeCount = 0L;
 
     private Date createTime;
 
