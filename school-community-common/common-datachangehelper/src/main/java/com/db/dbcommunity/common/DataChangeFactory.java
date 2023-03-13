@@ -28,7 +28,7 @@ public class DataChangeFactory {
         for (String type : handler.handleType()) {
             List<Runnable> tasks = handlerMap.get(type);
             if(tasks == null) tasks = new LinkedList<>();
-            else tasks.add(handler.runnable());
+            tasks.add(handler.runnable());
             handlerMap.put(type, tasks);
         }
 
