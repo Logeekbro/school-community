@@ -15,7 +15,7 @@ public class User implements EsDocument{
 
     private String avatar;
 
-    private Long fansCount;
+    private Long fansCount = 0L;
 
     private Date createTime;
 
