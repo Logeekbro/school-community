@@ -18,12 +18,6 @@
             <groupId>com.db.dbcommunity</groupId>
             <artifactId>common-web</artifactId>
             <version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.db.dbcommunity</groupId>
-                    <artifactId>common-mysql</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
