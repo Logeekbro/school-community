@@ -67,11 +67,6 @@ public class Article extends BaseEntity implements Serializable {
      */
     private Integer status;
 
-    /**
-     * 浏览量
-     */
-    private Long viewCount;
-
 
     /**
      * 逻辑删除， 0-未删除  1-已删除
