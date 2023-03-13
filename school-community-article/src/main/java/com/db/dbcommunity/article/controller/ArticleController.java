@@ -2,11 +2,13 @@ package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.model.dto.ArticleCreateDTO;
 import com.db.dbcommunity.article.model.dto.ArticleUpdateDTO;
+import com.db.dbcommunity.article.model.entity.Article;
 import com.db.dbcommunity.article.model.vo.*;
 import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
+import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.common.util.UserContext;
 import org.springframework.validation.annotation.Validated;
@@ -25,9 +27,9 @@ public class ArticleController {
      * 创建文章
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public R<SingleKeyVO> createArticle(@Validated @RequestBody ArticleCreateDTO articleVO) {
-        articleVO.setAuthorId(UserContext.getCurrentUserId());
-        Long id = articleService.create(articleVO);
+    public R<SingleKeyVO> createArticle(@Validated @RequestBody ArticleCreateDTO articleCreateDTO) {
+        articleCreateDTO.setAuthorId(UserContext.getCurrentUserId());
+        Long id = articleService.create(articleCreateDTO);
         SingleKeyVO vo = new SingleKeyVO(id);
         return R.success(vo);
     }
@@ -38,6 +40,7 @@ public class ArticleController {
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public R<Void> updateArticle(@Validated @RequestBody ArticleUpdateDTO updateVO) {
         updateVO.setAuthorId(UserContext.getCurrentUserId());
+
         return articleService.update(updateVO) ? R.success() : R.failed();
     }
 
@@ -117,6 +120,7 @@ public class ArticleController {
      *
      * @return 文章列表中需要的文章信息
      */
+    //TODO 由于删除了view_count字段，该接口需要重写
     @RequestMapping(value = "/popular", method = RequestMethod.GET)
     public R<MyPage<ArticleMainInfoVO>> getPopularArticles(@RequestParam(required = false) Integer sectionId,
                                                            @RequestParam Long current,
