@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.enums.DataChangeType;
 import com.db.dbcommunity.article.enums.OrderType;
+import com.db.dbcommunity.article.feign.SearchFeignClient;
 import com.db.dbcommunity.article.model.dto.ArticleCreateDTO;
 import com.db.dbcommunity.article.model.dto.ArticleUpdateDTO;
 import com.db.dbcommunity.article.model.entity.Article;
@@ -12,10 +13,13 @@ import com.db.dbcommunity.article.service.ArticleService;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.article.thread.ServiceContext;
+import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.api.ResultCode;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.MyPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +29,21 @@ import java.util.List;
 import static com.db.dbcommunity.article.util.MethodUtil.dataChangeCall;
 
 /**
-* @author bin
-* @description 针对表【tb_article】的数据库操作Service实现
-* @createDate 2023-02-12 09:45:15
-*/
+ * @author bin
+ * @description 针对表【tb_article】的数据库操作Service实现
+ * @createDate 2023-02-12 09:45:15
+ */
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
-    implements ArticleService{
+        implements ArticleService {
+
+    private final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
     @Resource
     private TagService tagService;
+
+    @Resource
+    private SearchFeignClient searchFeignClient;
 
 
     @Transactional
@@ -49,21 +58,40 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
             article.setStatus(3);
         }
         // 保存文章
-        if (dataChangeCall(DataChangeType.INSERT_ARTICLE, ()-> baseMapper.insert(article) > 0)) {
+        if (dataChangeCall(DataChangeType.INSERT_ARTICLE, () -> baseMapper.insert(article) > 0)) {
             // 保存标签
             tagService.handleArticleTagCreate(article.getArticleId(), articleVO.getTags());
-            // TODO 索引至ES
+            // 索引至ES
+            Article[] articles = new Article[1];
+            articles[0] = article;
+            R<Void> resp = searchFeignClient.indexArticle(articles);
+            if (!resp.getCode().equals(200)) {
+                logger.error("索引文章到ES失败->{}", article);
+                ApiAsserts.fail(resp.getMessage());
+            }
         } else {
             ApiAsserts.fail(ResultCode.FAILED);
         }
         return article.getArticleId();
     }
 
+    @Transactional
     @Override
     public boolean update(ArticleUpdateDTO updateDTO) {
         Article article = MyBeanUtil.copyProps(updateDTO, Article.class);
         if (updateDTO.getNeedReview()) article.setStatus(1);
-        return dataChangeCall(DataChangeType.UPDATE_ARTICLE, () -> this.baseMapper.updateById(article) > 0);
+        boolean result = dataChangeCall(DataChangeType.UPDATE_ARTICLE, () -> this.baseMapper.updateById(article) > 0);
+        if (result) {
+            // 更新ES数据
+            Article[] articles = new Article[1];
+            articles[0] = article;
+            R<Void> resp = searchFeignClient.updateArticleIndex(articles);
+            if (!resp.getCode().equals(200)) {
+                logger.error("更新ES数据失败->{}", article);
+                ApiAsserts.fail(resp.getMessage());
+            }
+        }
+        return result;
     }
 
     @Override
@@ -80,13 +108,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     @Override
     public boolean deleteArticleById(Long articleId, Long userId) {
         ServiceContext.setArticleId(articleId);
-        if(userId != null) {
+        boolean result;
+        if (userId != null) {
             LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Article::getArticleId, articleId).eq(Article::getAuthorId, userId);
-            return dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.delete(queryWrapper) > 0);
+            result = dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.delete(queryWrapper) > 0);
         } else {
-            return dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.deleteById(articleId) > 0);
+            result = dataChangeCall(DataChangeType.DELETE_ARTICLE, () -> this.baseMapper.deleteById(articleId) > 0);
         }
+        if (result) {
+            // 数据库删除成功后同步把ES中的数据也删除
+            Long[] ids = new Long[1];
+            ids[0] = articleId;
+            R<Void> resp = searchFeignClient.deleteArticleIndex(ids);
+            if (!resp.getCode().equals(200)) {
+                logger.error("删除ES数据失败->{}", articleId);
+                ApiAsserts.fail(resp.getMessage());
+            }
+        }
+        return result;
     }
 
     @Override
