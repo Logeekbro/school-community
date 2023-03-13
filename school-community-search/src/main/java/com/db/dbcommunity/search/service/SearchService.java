@@ -3,7 +3,6 @@ package com.db.dbcommunity.search.service;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch._types.query_dsl.SpanTermQuery;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.HitsMetadata;
@@ -31,9 +30,25 @@ public class SearchService {
             SearchResponse<Article> response = client.search(s -> s
                             .index(ESConstant.ARTICLE_INDEX_NAME)
                             .query(q -> q
-                                    .match(m -> m
-                                            .field("title")
-                                            .query(keyword)))
+                                    .bool(b -> b
+                                            .must(m -> m
+                                                    .bool(bo -> bo
+                                                            .must(mu -> mu
+                                                                    .bool(boo -> boo
+                                                                            .should(sh -> sh
+                                                                                    .match(ma -> ma
+                                                                                            .field("status")
+                                                                                            .query(0)))
+                                                                            .should(sh -> sh
+                                                                                    .match(ma -> ma
+                                                                                            .field("status")
+                                                                                            .query(3))))
+                                                            )
+                                                            .must(mu -> mu
+                                                                    .match(ma -> ma
+                                                                            .field("title")
+                                                                            .query(keyword))))))
+                            )
                             .highlight(h -> h
                                     .fields("title", j -> j
                                             .preTags("<b style='color: #009ad6'>")
