@@ -32,6 +32,7 @@
         <module>school-community-relation</module>
         <module>school-community-thirdparty</module>
         <module>school-community-search</module>
+        <module>school-community-crontask</module>
     </modules>
 
     <dependencyManagement>
