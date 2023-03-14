@@ -30,4 +30,10 @@ public interface RedisNameSpace {
     String ARTICLE_VISIT_STATUS = "article:visit:";
     // 文章浏览量前缀
     String ARTICLE_VISIT_COUNT = "article:visitCount:";
+    // 点赞数有更新的文章id集合
+    String LIKE_COUNT_BE_UPDATED_ARTICLE_IDS = "article:beUpdated:likeCount:ids:";
+    // 浏览量有更新的文章id集合
+    String VIEW_COUNT_BE_UPDATED_ARTICLE_IDS = "article:beUpdated:viewCount:ids:";
+    // 粉丝数有更新的用户id集合
+    String FANS_COUNT_BE_UPDATED_USER_IDS = "user:beUpdated:fansCount:ids:";
 }
