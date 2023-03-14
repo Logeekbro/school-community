@@ -2,12 +2,14 @@ package com.db.dbcommunity.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.constant.RedisNameSpace;
 import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.enums.DataChangeType;
+import com.db.dbcommunity.user.feign.ESFeignClient;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
@@ -33,6 +35,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource
+    private ESFeignClient esFeignClient;
 
     @Override
     public UserAuthDTO getUserAuthByAccount(String account) {
@@ -102,7 +107,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(this.baseMapper.exists(queryWrapper)) ApiAsserts.fail("用户名或邮箱已存在");
         User user = MyBeanUtil.copyProps(vo, User.class);
         user.setPassword(new BCryptPasswordEncoder().encode(vo.getPassword()));
-        return dataChangeCall(DataChangeType.USER_REGISTER.getDesc(), () -> this.baseMapper.insert(user) > 0);
+        boolean result = dataChangeCall(DataChangeType.USER_REGISTER.getDesc(), () -> this.baseMapper.insert(user) > 0);
+        if(result) {
+            User[] users = new User[1];
+            users[0] = user;
+            R<Void> resp = esFeignClient.indexUser(users);
+            if(!resp.getCode().equals(200)) {
+                ApiAsserts.fail(resp.getMessage());
+            }
+        }
+        return result;
     }
 }
 
