@@ -24,20 +24,24 @@ public class VisitServiceImpl implements VisitService {
         boolean isVisit = Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(RedisNameSpace.ARTICLE_VISIT_STATUS + articleId, currentUserId));
         if(!isVisit) {
             // 没浏览过则:
-            stringRedisTemplate.execute(new SessionCallback<List<Object>>() {
-                public List<Object> execute(RedisOperations operations) throws DataAccessException {
-                    //0. 开启事务
-                    operations.multi();
-                    //1. 改变浏览状态
-                    operations.opsForValue().setBit(RedisNameSpace.ARTICLE_VISIT_STATUS + articleId, currentUserId, true);
-                    //2. 增加浏览量
-                    operations.opsForZSet().incrementScore(RedisNameSpace.ARTICLE_VISIT_COUNT, articleId.toString(), 1);
-                    //3. 提交事务
-                    return operations.exec();
-                }
-            });
-            // 将当前文章id加入到浏览量有更新的集合中
+            stringRedisTemplate.opsForValue().setBit(RedisNameSpace.ARTICLE_VISIT_STATUS + articleId, currentUserId, true);
+            stringRedisTemplate.opsForZSet().incrementScore(RedisNameSpace.ARTICLE_VISIT_COUNT, articleId.toString(), 1);
             stringRedisTemplate.opsForSet().add(RedisNameSpace.VIEW_COUNT_BE_UPDATED_ARTICLE_IDS, articleId.toString());
+//            stringRedisTemplate.execute(new SessionCallback<List<Object>>() {
+//                public List<Object> execute(RedisOperations operations) throws DataAccessException {
+//                    //0. 开启事务
+//                    operations.multi();
+//                    //1. 改变浏览状态
+//                    operations.opsForValue().setBit(RedisNameSpace.ARTICLE_VISIT_STATUS + articleId, currentUserId, true);
+//                    //2. 增加浏览量
+//                    operations.opsForZSet().incrementScore(RedisNameSpace.ARTICLE_VISIT_COUNT, articleId.toString(), 1);
+//                    //3. 将当前文章id加入到浏览量有更新的集合中
+//                    operations.opsForSet().add(RedisNameSpace.VIEW_COUNT_BE_UPDATED_ARTICLE_IDS, articleId.toString());
+//                    //4. 提交事务
+//                    return operations.exec();
+//                }
+//            });
+
         }
         return true;
     }
