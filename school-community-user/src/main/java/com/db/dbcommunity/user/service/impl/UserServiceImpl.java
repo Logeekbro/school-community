@@ -19,6 +19,7 @@ import com.db.dbcommunity.user.mapper.UserMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -100,6 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return redisDelete && mysqlDelete;
     }
 
+    @Transactional
     @Override
     public boolean register(UserRegisterVO vo) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
