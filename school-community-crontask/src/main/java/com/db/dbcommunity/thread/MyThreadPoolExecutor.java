@@ -15,7 +15,12 @@ public class MyThreadPoolExecutor {
     }
 
     public static void run(Runnable runnable) {
-        CompletableFuture.runAsync(runnable, threadPool);
+        CompletableFuture.runAsync(runnable, threadPool)
+                .whenComplete((_n, ex) -> {
+                    if(ex != null) {
+                        ex.printStackTrace();
+                    }
+                });
     }
 
     public static ExecutorService getThreadPool() {
