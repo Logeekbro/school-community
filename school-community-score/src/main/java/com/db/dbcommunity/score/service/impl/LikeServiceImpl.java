@@ -6,6 +6,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class LikeServiceImpl implements LikeService {
@@ -31,6 +33,10 @@ public class LikeServiceImpl implements LikeService {
             stringRedisTemplate.opsForValue().setBit(statusKey, userId, isLike);
             // zset中修改分数(点赞数)
             stringRedisTemplate.opsForZSet().incrementScore(scoreKey, id.toString(), isLike ? 1 : -1);
+            if(type.equals("article")) {
+                // 将当前文章id加入点赞数有更新的id集合
+                stringRedisTemplate.opsForSet().add(RedisNameSpace.LIKE_COUNT_BE_UPDATED_ARTICLE_IDS, id.toString());
+            }
             return true;
         }
         return false;
