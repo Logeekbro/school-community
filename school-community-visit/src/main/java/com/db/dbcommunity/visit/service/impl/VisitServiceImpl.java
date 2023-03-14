@@ -36,7 +36,8 @@ public class VisitServiceImpl implements VisitService {
                     return operations.exec();
                 }
             });
-
+            // 将当前文章id加入到浏览量有更新的集合中
+            stringRedisTemplate.opsForSet().add(RedisNameSpace.VIEW_COUNT_BE_UPDATED_ARTICLE_IDS, articleId.toString());
         }
         return true;
     }
