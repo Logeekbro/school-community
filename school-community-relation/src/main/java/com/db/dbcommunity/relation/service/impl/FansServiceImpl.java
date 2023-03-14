@@ -17,9 +17,13 @@ public class FansServiceImpl implements FansService {
     @Override
     public MyPage<Long> getFansList(Long currentUserId, Long current, Short size) {
         String key = RedisNameSpace.FANS_PREFIX + currentUserId;
-        Long total = redisTemplate.opsForZSet().size(key);
-        MyPage<Long> myPage = new MyPage<>(current, size, total);
+        MyPage<Long> myPage = new MyPage<>(current, size, getFansCountByUserId(currentUserId));
         myPage.setRecords(redisTemplate.opsForZSet().range(key, myPage.offset(), myPage.offset() + size - 1));
         return myPage;
+    }
+
+    @Override
+    public Long getFansCountByUserId(Long userId) {
+        return redisTemplate.opsForZSet().size(RedisNameSpace.FANS_PREFIX + userId);
     }
 }
