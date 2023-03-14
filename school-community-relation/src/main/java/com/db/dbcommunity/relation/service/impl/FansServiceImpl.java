@@ -4,6 +4,7 @@ import com.db.dbcommunity.common.constant.RedisNameSpace;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.relation.service.FansService;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,18 +13,18 @@ import javax.annotation.Resource;
 public class FansServiceImpl implements FansService {
 
     @Resource
-    private RedisTemplate<String, Long> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public MyPage<Long> getFansList(Long currentUserId, Long current, Short size) {
+    public MyPage<String> getFansList(Long currentUserId, Long current, Short size) {
         String key = RedisNameSpace.FANS_PREFIX + currentUserId;
-        MyPage<Long> myPage = new MyPage<>(current, size, getFansCountByUserId(currentUserId));
-        myPage.setRecords(redisTemplate.opsForZSet().range(key, myPage.offset(), myPage.offset() + size - 1));
+        MyPage<String> myPage = new MyPage<>(current, size, getFansCountByUserId(currentUserId));
+        myPage.setRecords(stringRedisTemplate.opsForZSet().range(key, myPage.offset(), myPage.offset() + size - 1));
         return myPage;
     }
 
     @Override
     public Long getFansCountByUserId(Long userId) {
-        return redisTemplate.opsForZSet().size(RedisNameSpace.FANS_PREFIX + userId);
+        return stringRedisTemplate.opsForZSet().size(RedisNameSpace.FANS_PREFIX + userId);
     }
 }

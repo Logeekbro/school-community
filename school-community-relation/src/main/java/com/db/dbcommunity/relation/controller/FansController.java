@@ -24,8 +24,8 @@ public class FansController {
      * 获取用户的粉丝id列表分页数据
      */
     @GetMapping("/list")
-    public R<MyPage<Long>> getFansList(@RequestParam Long current, @RequestParam Short size) {
-        MyPage<Long> page = fansService.getFansList(UserContext.getCurrentUserId(), current, size);
+    public R<MyPage<String>> getFansList(@RequestParam Long current, @RequestParam Short size) {
+        MyPage<String> page = fansService.getFansList(UserContext.getCurrentUserId(), current, size);
         return R.success(page);
     }
 
