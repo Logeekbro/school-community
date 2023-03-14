@@ -26,5 +26,5 @@ public interface FollowService {
     /**
      * 根据用户id获取该用户关注的用户id列表分页数据
      */
-    MyPage<Long> getFollowList(Long currentUserId, Long current, Short size);
+    MyPage<String> getFollowList(Long currentUserId, Long current, Short size);
 }

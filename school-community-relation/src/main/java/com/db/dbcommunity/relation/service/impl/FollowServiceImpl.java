@@ -4,6 +4,7 @@ import com.db.dbcommunity.common.constant.RedisNameSpace;
 import com.db.dbcommunity.common.util.MyPage;
 import com.db.dbcommunity.relation.service.FollowService;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +13,7 @@ import javax.annotation.Resource;
 public class FollowServiceImpl implements FollowService {
 
     @Resource
-    private RedisTemplate<String, Long> redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
 
     @Override
@@ -20,15 +21,17 @@ public class FollowServiceImpl implements FollowService {
         if(isFollow) {
             long now = System.currentTimeMillis();
             redisTemplate.opsForZSet()
-                    .add(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId, now);
+                    .add(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId.toString(), now);
             redisTemplate.opsForZSet()
-                    .add(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId, now);
+                    .add(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId.toString(), now);
         } else {
             redisTemplate.opsForZSet()
                     .remove(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId);
             redisTemplate.opsForZSet()
                     .remove(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId);
         }
+        // 将当前被关注者id存入粉丝数量有更新的集合中
+        redisTemplate.opsForSet().add(RedisNameSpace.FANS_COUNT_BE_UPDATED_USER_IDS, beFollowUserId.toString());
         return true;
     }
 
@@ -38,10 +41,10 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public MyPage<Long> getFollowList(Long currentUserId, Long current, Short size) {
+    public MyPage<String> getFollowList(Long currentUserId, Long current, Short size) {
         String key = RedisNameSpace.FOLLOW_PREFIX + currentUserId;
         Long total = redisTemplate.opsForZSet().size(key);
-        MyPage<Long> myPage = new MyPage<>(current, size, total);
+        MyPage<String> myPage = new MyPage<>(current, size, total);
         myPage.setRecords(redisTemplate.opsForZSet().range(key, myPage.offset(), myPage.offset() + size - 1));
         return myPage;
     }

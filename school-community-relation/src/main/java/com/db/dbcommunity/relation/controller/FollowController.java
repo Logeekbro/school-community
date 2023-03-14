@@ -52,8 +52,8 @@ public class FollowController {
      * 获取关注列表
      */
     @GetMapping("/list")
-    public R<MyPage<Long>> getFollowList(@RequestParam Long current, @RequestParam Short size) {
-        MyPage<Long> list = followService.getFollowList(UserContext.getCurrentUserId(), current, size);
+    public R<MyPage<String>> getFollowList(@RequestParam Long current, @RequestParam Short size) {
+        MyPage<String> list = followService.getFollowList(UserContext.getCurrentUserId(), current, size);
         return R.success(list);
     }
 
@@ -61,9 +61,9 @@ public class FollowController {
      * 根据用户id获取用户的关注列表
      */
     @GetMapping("/list/userId/{userId}")
-    public R<MyPage<Long>> getFollowListByUserId(@RequestParam Long current, @RequestParam Short size,
+    public R<MyPage<String>> getFollowListByUserId(@RequestParam Long current, @RequestParam Short size,
                                                  @PathVariable Long userId) {
-        MyPage<Long> list = followService.getFollowList(userId, current, size);
+        MyPage<String> list = followService.getFollowList(userId, current, size);
         return R.success(list);
     }
 }
