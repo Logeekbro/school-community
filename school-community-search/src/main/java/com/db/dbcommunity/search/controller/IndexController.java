@@ -3,7 +3,9 @@ package com.db.dbcommunity.search.controller;
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.search.common.ESConstant;
 import com.db.dbcommunity.search.document.Article;
+import com.db.dbcommunity.search.document.ArticleUpdate;
 import com.db.dbcommunity.search.document.User;
+import com.db.dbcommunity.search.document.UserUpdate;
 import com.db.dbcommunity.search.service.IndexService;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +55,7 @@ public class IndexController {
      * 更新文章索引
      */
     @PutMapping("/article")
-    public R<Void> updateArticleIndex(@RequestBody List<Article> articles) {
+    public R<Void> updateArticleIndex(@RequestBody List<ArticleUpdate> articles) {
         return indexService.updateIndex(ESConstant.ARTICLE_INDEX_NAME, articles) ? R.success() : R.failed();
     }
 
@@ -61,7 +63,7 @@ public class IndexController {
      * 更新用户索引
      */
     @PutMapping("/user")
-    public R<Void> updateUserIndex(@RequestBody List<User> users) {
+    public R<Void> updateUserIndex(@RequestBody List<UserUpdate> users) {
         return indexService.updateIndex(ESConstant.USER_INDEX_NAME, users) ? R.success() : R.failed();
     }
 
