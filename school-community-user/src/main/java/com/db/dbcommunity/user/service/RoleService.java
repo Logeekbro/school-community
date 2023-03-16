@@ -19,4 +19,9 @@ public interface RoleService extends IService<Role> {
      * 将角色对应的权限信息加载到Redis
      */
     boolean refreshRolePerms();
+
+    /**
+     * 为用户添加角色
+     */
+    boolean addUserRoleByUserId(Long userId, Integer roleId);
 }

@@ -21,7 +21,15 @@ public class UserRoleController {
      * @return 是否添加成功
      */
     @PostMapping("/id/{roleId}")
-    public R<Boolean> addRolePermissionById(@PathVariable Integer roleId, @RequestParam Long permissionId) {
+    public R<Void> addRolePermissionById(@PathVariable Integer roleId, @RequestParam Long permissionId) {
         return roleService.saveRolePermissionById(roleId, permissionId) ? R.success() : R.failed();
+    }
+
+    /**
+     * 为用户添加角色
+     */
+    @PostMapping("/user/{userId}")
+    public R<Void> addUserRoleByUserId(@RequestParam Integer roleId, @PathVariable Long userId) {
+        return roleService.addUserRoleByUserId(userId, roleId) ? R.success() : R.failed();
     }
 }

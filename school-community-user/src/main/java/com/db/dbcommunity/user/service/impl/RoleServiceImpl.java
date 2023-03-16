@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.common.mapper.MiddleTableMapper;
 import com.db.dbcommunity.user.model.entity.Role;
 import com.db.dbcommunity.user.model.mtb.RolePermission;
+import com.db.dbcommunity.user.model.mtb.UserRole;
 import com.db.dbcommunity.user.service.RoleService;
 import com.db.dbcommunity.user.mapper.RoleMapper;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -30,6 +31,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     private RolePermission rolePermission;
 
     @Resource
+    private UserRole userRole;
+
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
@@ -43,10 +47,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
         if(roles == null) return false;
         for (Role role : roles) {
             if(role.getPermUrls() != null && role.getPermUrls().size() > 0) {
+                stringRedisTemplate.delete(ROLE_URL_PERMS_KEY + role.getCode());
                 stringRedisTemplate.opsForSet().add(ROLE_URL_PERMS_KEY + role.getCode(), role.getPermUrls().toArray(new String[0]));
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean addUserRoleByUserId(Long userId, Integer roleId) {
+        return middleTableMapper.insertRelationIfNotExist(userRole, userId, roleId);
     }
 }
 
