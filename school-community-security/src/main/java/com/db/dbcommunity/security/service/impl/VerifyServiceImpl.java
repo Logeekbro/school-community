@@ -1,6 +1,7 @@
 package com.db.dbcommunity.security.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.alibaba.fastjson.JSONObject;
 import com.db.dbcommunity.common.constant.SecurityConstant;
 import com.db.dbcommunity.common.exception.ApiAsserts;
 import com.db.dbcommunity.security.mapper.VerifyWordMapper;
@@ -91,12 +92,13 @@ public class VerifyServiceImpl implements VerifyService {
     }
 
     private void setLoginVerifyCode(String verifyId, VerifyDTO verifyDTO) {
-        redisCache.setCacheObject(LOGIN_VERIFY_CODE_PREFIX + verifyId, verifyDTO, LOGIN_VERIFY_CODE_EXPIRE_TIME, TimeUnit.SECONDS);
+        redisCache.setCacheObject(LOGIN_VERIFY_CODE_PREFIX + verifyId, verifyDTO.toString(), LOGIN_VERIFY_CODE_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     @Override
     public VerifyDTO getLoginVerifyCode(String verifyId) {
-        return redisCache.getCacheObject(LOGIN_VERIFY_CODE_PREFIX + verifyId);
+        String cacheObject = redisCache.getCacheObject(LOGIN_VERIFY_CODE_PREFIX + verifyId);
+        return JSONObject.parseObject(cacheObject, VerifyDTO.class);
     }
 
     private Set<String> getAllWord() {
