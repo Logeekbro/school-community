@@ -37,9 +37,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Resource
     private RoleService roleService;
 
+    @Deprecated
     @Override
     public boolean refreshPermRolesRules() {
-        stringRedisTemplate.delete(Collections.singletonList(GlobalConstant.URL_PERM_ROLES_KEY));
+        stringRedisTemplate.delete(Collections.singletonList(GlobalConstant.ROLE_URL_PERMS_KEY));
         List<Permission> permissions = this.baseMapper.selectPermRoles();
         if (CollectionUtil.isNotEmpty(permissions)) {
             List<Permission> urlPermList = permissions.stream()
@@ -50,9 +51,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                 urlPermList.forEach(item -> {
                     String perm = item.getUrlPerm();
                     List<String> roles = item.getRoles();
+
                     urlPermRoles.put(perm, roles);
                 });
-                stringRedisTemplate.opsForHash().putAll(GlobalConstant.URL_PERM_ROLES_KEY, urlPermRoles);
+                stringRedisTemplate.opsForHash().putAll(GlobalConstant.ROLE_URL_PERMS_KEY, urlPermRoles);
             }
         }
         return true;
@@ -102,7 +104,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         }
         if(result > 0) {
             // 刷新缓存
-            MyThreadPoolExecutor.run(this::refreshPermRolesRules);
+            MyThreadPoolExecutor.run(() -> roleService.refreshRolePerms());
             return true;
         }
         return false;

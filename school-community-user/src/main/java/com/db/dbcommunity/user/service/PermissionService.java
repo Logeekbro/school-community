@@ -16,6 +16,7 @@ public interface PermissionService extends IService<Permission> {
      * 将所有 权限及拥有该权限的角色列表 对象 加载到redis中
      * @return 是否操作成功
      */
+    @Deprecated
     boolean refreshPermRolesRules();
 
     /**
