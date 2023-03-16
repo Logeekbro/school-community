@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -33,7 +33,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "security")
 public class ResourceServerManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Setter
     private List<String> ignoreUrls;
@@ -61,11 +61,11 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
         }
 
         // 从redis中获取资源权限
-        Map<String, Object> urlPermRolesRules = redisTemplate.opsForHash().entries(GlobalConstant.URL_PERM_ROLES_KEY);
+        Map<Object, Object> urlPermRolesRules = stringRedisTemplate.opsForHash().entries(GlobalConstant.URL_PERM_ROLES_KEY);
         List<String> authorizedRoles = new ArrayList<>(); // 拥有访问权限的角色
         // 获取当前资源 所需要的角色
-        for (Map.Entry<String, Object> permRoles : urlPermRolesRules.entrySet()) {
-            String perm = permRoles.getKey();
+        for (Map.Entry<Object, Object> permRoles : urlPermRolesRules.entrySet()) {
+            String perm = (String) permRoles.getKey();
             if (pathMatcher.match(perm, restfulPath)) {
                 List<String> roles = Convert.toList(String.class, permRoles.getValue());
                 authorizedRoles.addAll(Convert.toList(String.class, roles));
@@ -91,9 +91,6 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
 
     /**
      * 跳过校验
-     *
-     * @param path
-     * @return
      */
     private boolean skipValid(String path) {
         for (String skipPath : ignoreUrls) {
