@@ -12,7 +12,7 @@ import com.db.dbcommunity.user.service.PermissionService;
 import com.db.dbcommunity.user.mapper.PermissionMapper;
 import com.db.dbcommunity.user.service.RoleService;
 import com.db.dbcommunity.user.thread.MyThreadPoolExecutor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,14 +32,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     implements PermissionService {
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private RoleService roleService;
 
     @Override
     public boolean refreshPermRolesRules() {
-        redisTemplate.delete(Collections.singletonList(GlobalConstant.URL_PERM_ROLES_KEY));
+        stringRedisTemplate.delete(Collections.singletonList(GlobalConstant.URL_PERM_ROLES_KEY));
         List<Permission> permissions = this.baseMapper.selectPermRoles();
         if (CollectionUtil.isNotEmpty(permissions)) {
             List<Permission> urlPermList = permissions.stream()
@@ -52,7 +52,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                     List<String> roles = item.getRoles();
                     urlPermRoles.put(perm, roles);
                 });
-                redisTemplate.opsForHash().putAll(GlobalConstant.URL_PERM_ROLES_KEY, urlPermRoles);
+                stringRedisTemplate.opsForHash().putAll(GlobalConstant.URL_PERM_ROLES_KEY, urlPermRoles);
             }
         }
         return true;
