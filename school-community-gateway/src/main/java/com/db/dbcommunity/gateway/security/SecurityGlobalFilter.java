@@ -6,15 +6,13 @@ import com.db.dbcommunity.common.constant.*;
 import com.db.dbcommunity.gateway.util.ResponseUtil;
 import com.db.dbcommunity.gateway.util.UrlPatternUtil;
 import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.Payload;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -30,7 +28,7 @@ import java.util.Map;
 public class SecurityGlobalFilter implements GlobalFilter, Ordered {
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @SneakyThrows
     @Override
@@ -46,7 +44,7 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
             String verifyToken = request.getHeaders().getFirst(SecurityConstant.VERIFY_TOKEN_KEY);
             if(verifyToken != null) {
                 // 检查安全令牌的正确性
-                Object token = redisTemplate.opsForValue().get(SecurityConstant.CACHE_VERIFY_TOKEN_PREFIX + verifyToken);
+                Object token = stringRedisTemplate.opsForValue().get(SecurityConstant.CACHE_VERIFY_TOKEN_PREFIX + verifyToken);
                 if(token == null) {
                     return Mono.defer(() -> Mono.just(exchangeResponse))
                             .flatMap(response -> ResponseUtil.writeErrorInfo(response, ResultCode.UN_SECURITY_REQUEST));
@@ -67,7 +65,7 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         Map<String, Object> payloadMap = JWSObject.parse(token).getPayload().toJSONObject();
         String key = RedisNameSpace.JTI_PREFIX + payloadMap.get("userId");
         String jti = (String) payloadMap.get("jti");
-        if(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, jti))) {
+        if(Boolean.TRUE.equals(stringRedisTemplate.opsForSet().isMember(key, jti))) {
             return Mono.defer(() -> Mono.just(exchangeResponse))
                     .flatMap(response -> ResponseUtil.writeErrorInfo(response, ResultCode.TOKEN_INVALID_OR_EXPIRED));
         }

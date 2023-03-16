@@ -16,7 +16,7 @@ import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 import com.db.dbcommunity.user.service.UserService;
 import com.db.dbcommunity.user.mapper.UserMapper;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService {
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private ESFeignClient esFeignClient;
@@ -77,22 +77,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public boolean logout(String jti, Long userId) {
-        return redisTemplate.opsForSet().remove(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
+        return stringRedisTemplate.opsForSet().remove(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
     }
 
     @Override
     public boolean login(String jti, Long userId) {
-        if(redisTemplate.opsForSet().size(RedisNameSpace.JTI_PREFIX + userId) >= UserConstant.MAX_CLIENT_COUNT) {
+        if(stringRedisTemplate.opsForSet().size(RedisNameSpace.JTI_PREFIX + userId) >= UserConstant.MAX_CLIENT_COUNT) {
             // 如果登录的客户端数量超出限制，则移除第一个客户端的jti
-            redisTemplate.opsForSet().pop(RedisNameSpace.JTI_PREFIX + userId);
+            stringRedisTemplate.opsForSet().pop(RedisNameSpace.JTI_PREFIX + userId);
         }
-        return redisTemplate.opsForSet().add(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
+        return stringRedisTemplate.opsForSet().add(RedisNameSpace.JTI_PREFIX + userId, jti) > 0;
     }
 
     @Override
     public boolean ban(Long userId) {
         // 删除jti集合
-        boolean redisDelete = Boolean.TRUE.equals(redisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId));
+        boolean redisDelete = Boolean.TRUE.equals(stringRedisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId));
         // 改变status字段
         User user = new User();
         user.setUserId(userId);
