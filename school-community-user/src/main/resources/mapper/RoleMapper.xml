@@ -5,22 +5,32 @@
 <mapper namespace="com.db.dbcommunity.user.mapper.RoleMapper">
 
     <resultMap id="BaseResultMap" type="com.db.dbcommunity.user.model.entity.Role">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="code" column="code" jdbcType="VARCHAR"/>
-            <result property="sort" column="sort" jdbcType="INTEGER"/>
-            <result property="status" column="status" jdbcType="TINYINT"/>
-            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
-            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,name,code,
-        sort,status,deleted,
-        create_time,update_time,update_by,
-        create_by
-    </sql>
+    <resultMap id="RolePermsMap" type="com.db.dbcommunity.user.model.entity.Role">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <collection property="permUrls" ofType="String" javaType="arrayList">
+            <result column="url_perm"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectRolePerms" resultMap="RolePermsMap">
+        SELECT t1.id,
+               t1.code,
+               t3.url_perm
+        FROM role t1
+                 LEFT JOIN role_permission t2 ON t1.id = t2.role_id
+                 LEFT JOIN permission t3 ON t2.permission_id = t3.id
+    </select>
 </mapper>

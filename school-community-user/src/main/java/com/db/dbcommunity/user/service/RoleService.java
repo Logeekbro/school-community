@@ -10,5 +10,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * 为角色添加相应权限
+     */
     boolean saveRolePermissionById(Integer roleId, Long permissionId);
+
+    /**
+     * 将角色对应的权限信息加载到Redis
+     */
+    boolean refreshRolePerms();
 }

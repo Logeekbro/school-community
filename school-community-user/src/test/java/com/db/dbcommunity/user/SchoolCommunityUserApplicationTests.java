@@ -1,5 +1,7 @@
 package com.db.dbcommunity.user;
 
+import com.db.dbcommunity.user.mapper.RoleMapper;
+import com.db.dbcommunity.user.model.entity.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +32,17 @@ class SchoolCommunityUserApplicationTests {
 //        System.out.println(member);
         Long gwijfqwd = redisTemplate.opsForSet().size("gwijfqwd");
         System.out.println(gwijfqwd);
+    }
+
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Test
+    void testNewRolePerms() {
+        for (Role selectRolePerm : roleMapper.selectRolePerms()) {
+            System.out.println(selectRolePerm);
+        }
+
     }
 
 }
