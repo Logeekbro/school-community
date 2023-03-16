@@ -1,6 +1,7 @@
 package com.db.dbcommunity.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.db.dbcommunity.common.constant.RedisNameSpace;
 import com.db.dbcommunity.common.mapper.MiddleTableMapper;
 import com.db.dbcommunity.user.model.entity.Role;
 import com.db.dbcommunity.user.model.mtb.RolePermission;
@@ -56,7 +57,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
 
     @Override
     public boolean addUserRoleByUserId(Long userId, Integer roleId) {
-        return middleTableMapper.insertRelationIfNotExist(userRole, userId, roleId);
+        Boolean result = middleTableMapper.insertRelationIfNotExist(userRole, userId, roleId);
+        if(result) {
+            // 使该用户退出登录，以重新加载角色信息
+            stringRedisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId);
+        }
+        return result;
     }
 }
 
