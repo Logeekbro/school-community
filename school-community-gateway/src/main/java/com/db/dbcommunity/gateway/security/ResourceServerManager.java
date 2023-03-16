@@ -44,7 +44,6 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
         if (request.getMethod() == HttpMethod.OPTIONS) { // 预检请求放行
             return Mono.just(new AuthorizationDecision(true));
         }
-        PathMatcher pathMatcher = new AntPathMatcher();
         String method = request.getMethodValue();
         String path = request.getURI().getPath();
 
@@ -60,33 +59,19 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
             return Mono.just(new AuthorizationDecision(false));
         }
 
-        // 从redis中获取资源权限
-        Map<Object, Object> urlPermRolesRules = stringRedisTemplate.opsForHash().entries(GlobalConstant.URL_PERM_ROLES_KEY);
-        List<String> authorizedRoles = new ArrayList<>(); // 拥有访问权限的角色
-        // 获取当前资源 所需要的角色
-        for (Map.Entry<Object, Object> permRoles : urlPermRolesRules.entrySet()) {
-            String perm = (String) permRoles.getKey();
-            if (pathMatcher.match(perm, restfulPath)) {
-                List<String> roles = Convert.toList(String.class, permRoles.getValue());
-                authorizedRoles.addAll(Convert.toList(String.class, roles));
-            }
-        }
-
         // 判断JWT中携带的用户角色是否有权限访问
-        Mono<AuthorizationDecision> authorizationDecisionMono = mono
+        return mono
                 .filter(Authentication::isAuthenticated)
                 .flatMapIterable(Authentication::getAuthorities)
                 .map(GrantedAuthority::getAuthority)
                 .any(authority -> {
                     String roleCode = authority.substring(AuthConstant.AUTHORITY_PREFIX.length()); // 用户的角色
-                    return
-                            // root 用户直接放行
-                            roleCode.equals(AuthConstant.ROOT_ROLE_CODE) ||
-                                    (CollectionUtil.isNotEmpty(authorizedRoles) && authorizedRoles.contains(roleCode));
+                    if (roleCode.equals(AuthConstant.ROOT_ROLE_CODE)) return true;
+                    Boolean isMember = stringRedisTemplate.opsForSet().isMember(GlobalConstant.ROLE_URL_PERMS_KEY + roleCode, restfulPath);
+                    return Boolean.TRUE.equals(isMember);
                 })
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
-        return authorizationDecisionMono;
     }
 
     /**
