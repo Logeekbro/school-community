@@ -25,5 +25,5 @@ public interface UserFeignClient {
          * 将jti注册到系统中
          */
         @PostMapping(UserConstant.URI_PREFIX+"/login")
-        R<Void> login(@RequestParam("jti") String jti);
+        R<Void> login(@RequestParam("jti") String jti, @RequestParam("userId") Long userId);
 }
