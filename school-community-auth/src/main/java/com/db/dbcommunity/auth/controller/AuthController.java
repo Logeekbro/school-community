@@ -48,7 +48,7 @@ public class AuthController {
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         assert accessToken != null;
         // 将token中的jti注册到系统中，使服务端能够控制token的有效性
-        R<Void> result = userFeignClient.login((String) accessToken.getAdditionalInformation().get("jti"));
+        R<Void> result = userFeignClient.login((String) accessToken.getAdditionalInformation().get("jti"), (Long) accessToken.getAdditionalInformation().get("userId"));
         if(result.getCode().equals(ResultCode.SUCCESS.getCode())) return R.success(accessToken);
         return R.failed("登录失败");
     }
