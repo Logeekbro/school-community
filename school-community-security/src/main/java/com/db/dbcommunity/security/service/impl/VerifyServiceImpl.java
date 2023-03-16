@@ -9,7 +9,7 @@ import com.db.dbcommunity.security.util.RedisCache;
 import com.db.dbcommunity.common.util.RandomUtil;
 import com.db.dbcommunity.security.model.dto.VerifyDTO;
 import com.db.dbcommunity.security.model.vo.VerifyVO;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,7 +35,7 @@ public class VerifyServiceImpl implements VerifyService {
     private RedisCache redisCache;
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private VerifyWordMapper verifyWordMapper;
@@ -100,13 +100,13 @@ public class VerifyServiceImpl implements VerifyService {
     }
 
     private Set<String> getAllWord() {
-        return redisTemplate.opsForSet().distinctRandomMembers(VERIFY_WORD_SET, WORD_COUNT);
+        return stringRedisTemplate.opsForSet().distinctRandomMembers(VERIFY_WORD_SET, WORD_COUNT);
     }
 
     @Override
     public void loadVerifyWordFromDB() {
         Set<String> wordSet = verifyWordMapper.getWordSet();
-        redisTemplate.opsForSet().add(VERIFY_WORD_SET, wordSet.toArray(new String[0]));
+        stringRedisTemplate.opsForSet().add(VERIFY_WORD_SET, wordSet.toArray(new String[0]));
     }
 
     @Override
