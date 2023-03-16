@@ -14,6 +14,7 @@ import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.model.vo.UserRegisterVO;
+import com.db.dbcommunity.user.service.RoleService;
 import com.db.dbcommunity.user.service.UserService;
 import com.db.dbcommunity.user.mapper.UserMapper;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,6 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private ESFeignClient esFeignClient;
+
+    @Resource
+    private RoleService roleService;
 
     @Override
     public UserAuthDTO getUserAuthByAccount(String account) {
@@ -111,12 +115,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setPassword(new BCryptPasswordEncoder().encode(vo.getPassword()));
         boolean result = dataChangeCall(DataChangeType.USER_REGISTER.getDesc(), () -> this.baseMapper.insert(user) > 0);
         if(result) {
+            // 索引用户至ES
             User[] users = new User[1];
             users[0] = user;
             R<Void> resp = esFeignClient.indexUser(users);
             if(!resp.getCode().equals(200)) {
                 ApiAsserts.fail(resp.getMessage());
             }
+            // 为该用户添加默认的用户角色
+            roleService.addUserRoleByUserId(user.getUserId(), 10);
         }
         return result;
     }
