@@ -56,4 +56,9 @@ public interface UserService extends IService<User> {
      * 根据用户id获取用户头像
      */
     String getAvatarByUserId(Long userId);
+
+    /**
+     * 根据用户id获取用户昵称
+     */
+    String getNickNameByUserId(Long userId);
 }

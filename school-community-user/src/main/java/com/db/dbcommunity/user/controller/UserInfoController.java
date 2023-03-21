@@ -70,5 +70,12 @@ public class UserInfoController {
         return R.success(new SingleKeyVO(userService.getAvatarByUserId(userId)));
     }
 
+    /**
+     * 根据用户id获取昵称
+     */
+    @GetMapping("/nickName")
+    public R<SingleKeyVO> getUserNickName(@RequestParam Long userId) {
+        return R.success(new SingleKeyVO(userService.getNickNameByUserId(userId)));
+    }
 
 }
