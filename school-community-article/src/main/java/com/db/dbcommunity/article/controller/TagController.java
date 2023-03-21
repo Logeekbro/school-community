@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tag")
@@ -26,7 +27,7 @@ public class TagController {
      * 根据关键字模糊匹配标签名列表
      */
     @GetMapping("/list/similar")
-    public R<List<Object>> getSimilarTagsByKeyword(@RequestParam String keyword) {
+    public R<List<Map<String, Object>>> getSimilarTagsByKeyword(@RequestParam String keyword) {
         return R.success(tagService.getSimilarTagsByKeyword(keyword));
     }
 }

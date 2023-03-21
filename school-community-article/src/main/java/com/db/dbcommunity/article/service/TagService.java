@@ -4,6 +4,7 @@ import com.db.dbcommunity.article.model.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,5 +24,5 @@ public interface TagService extends IService<Tag> {
     /**
      * 根据关键字模糊匹配标签名列表
      */
-    List<Object> getSimilarTagsByKeyword(String keyword);
+    List<Map<String, Object>> getSimilarTagsByKeyword(String keyword);
 }

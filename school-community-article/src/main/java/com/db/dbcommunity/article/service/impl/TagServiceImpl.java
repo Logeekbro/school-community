@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -42,11 +43,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     }
 
     @Override
-    public List<Object> getSimilarTagsByKeyword(String keyword) {
+    public List<Map<String, Object>> getSimilarTagsByKeyword(String keyword) {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(Tag::getTagName);
         queryWrapper.like(Tag::getTagName, keyword);
-        return this.baseMapper.selectObjs(queryWrapper);
+        return this.baseMapper.selectMaps(queryWrapper);
     }
 }
 
