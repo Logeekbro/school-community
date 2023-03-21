@@ -34,6 +34,15 @@ public class UserInfoController {
     }
 
     /**
+     * 获取用户自身的基本信息
+     */
+    @GetMapping("/basic")
+    public R<UserBasicInfoVO> getSelfBasicInfo() {
+        UserBasicInfoVO vo = userService.getUserBasicInfoById(UserContext.getCurrentUserId());
+        return R.success(vo);
+    }
+
+    /**
      * 根据用户id获取用户的基本信息
      */
     @GetMapping("/basic/{userId}")
