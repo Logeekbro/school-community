@@ -157,7 +157,7 @@ public class ArticleController {
     /**
      * 通过文章id获取文章标题
      */
-    @RequestMapping("/open/title/{articleId}")
+    @RequestMapping("/title/{articleId}")
     public R<SingleKeyVO> getTitleByArticleId(@PathVariable Long articleId) {
         String title = articleService.getTitleByArticleId(articleId);
         SingleKeyVO vo = new SingleKeyVO(title);
