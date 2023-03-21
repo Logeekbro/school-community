@@ -2,6 +2,7 @@ package com.db.dbcommunity.user.controller;
 
 import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.constant.UserConstant;
+import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
@@ -59,6 +60,14 @@ public class UserInfoController {
     @PutMapping("/password")
     public R<Void> updatePassword(@RequestBody Map<String, String> body) {
         return userService.updatePassword(body.get("oldPwd"), body.get("newPwd"), UserContext.getCurrentUserId()) ? R.success() : R.failed();
+    }
+
+    /**
+     * 根据用户id获取头像
+     */
+    @GetMapping("/avatar")
+    public R<SingleKeyVO> getUserAvatar(@RequestParam Long userId) {
+        return R.success(new SingleKeyVO(userService.getAvatarByUserId(userId)));
     }
 
 

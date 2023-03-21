@@ -51,4 +51,9 @@ public interface UserService extends IService<User> {
      * 账号注册
      */
     boolean register(UserRegisterVO vo);
+
+    /**
+     * 根据用户id获取用户头像
+     */
+    String getAvatarByUserId(Long userId);
 }

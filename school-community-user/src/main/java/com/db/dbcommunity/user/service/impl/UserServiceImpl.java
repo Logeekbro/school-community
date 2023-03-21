@@ -127,6 +127,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return result;
     }
+
+    @Override
+    public String getAvatarByUserId(Long userId) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(User::getAvatar);
+        queryWrapper.eq(User::getUserId, userId);
+        return this.baseMapper.selectOne(queryWrapper).getAvatar();
+
+    }
 }
 
 
