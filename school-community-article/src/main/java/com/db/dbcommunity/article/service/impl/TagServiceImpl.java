@@ -40,6 +40,14 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     public List<String> selectTagNameListByArticleId(Long articleId) {
         return middleTableMapper.selectId2ListById1(articleTag, articleId);
     }
+
+    @Override
+    public List<Object> getSimilarTagsByKeyword(String keyword) {
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(Tag::getTagName);
+        queryWrapper.like(Tag::getTagName, keyword);
+        return this.baseMapper.selectObjs(queryWrapper);
+    }
 }
 
 

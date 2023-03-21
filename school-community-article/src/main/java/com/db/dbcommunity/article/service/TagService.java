@@ -19,4 +19,9 @@ public interface TagService extends IService<Tag> {
      * 通过文章id获取该文章的标签名列表
      */
     List<String> selectTagNameListByArticleId(Long articleId);
+
+    /**
+     * 根据关键字模糊匹配标签名列表
+     */
+    List<Object> getSimilarTagsByKeyword(String keyword);
 }

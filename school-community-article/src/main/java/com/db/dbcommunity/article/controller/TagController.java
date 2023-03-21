@@ -2,10 +2,7 @@ package com.db.dbcommunity.article.controller;
 
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.common.api.R;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,5 +20,13 @@ public class TagController {
     @GetMapping("/list/articleId/{articleId}")
     public R<List<String>> getTagNameListByArticleId(@PathVariable Long articleId) {
         return R.success(tagService.selectTagNameListByArticleId(articleId));
+    }
+
+    /**
+     * 根据关键字模糊匹配标签名列表
+     */
+    @GetMapping("/list/similar")
+    public R<List<Object>> getSimilarTagsByKeyword(@RequestParam String keyword) {
+        return R.success(tagService.getSimilarTagsByKeyword(keyword));
     }
 }
