@@ -1,5 +1,6 @@
 package com.db.dbcommunity.article.controller;
 
+import com.db.dbcommunity.article.model.vo.HotTagVO;
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.common.api.R;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +30,13 @@ public class TagController {
     @GetMapping("/list/similar")
     public R<List<Map<String, Object>>> getSimilarTagsByKeyword(@RequestParam String keyword) {
         return R.success(tagService.getSimilarTagsByKeyword(keyword));
+    }
+
+    /**
+     * 获取热门标签及其对应的文章数量
+     */
+    @GetMapping("/list/hot/{n}")
+    public R<List<HotTagVO>> getHotTags(@PathVariable Integer n) {
+        return R.success(tagService.getHotTags(n));
     }
 }

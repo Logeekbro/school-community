@@ -2,7 +2,12 @@ package com.db.dbcommunity.article.mapper;
 
 import com.db.dbcommunity.article.model.entity.Tag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.db.dbcommunity.article.model.vo.HotTagVO;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author bin
@@ -19,6 +24,9 @@ public interface TagMapper extends BaseMapper<Tag> {
      */
     @Insert("INSERT IGNORE INTO tb_tag VALUES (#{tagName}, NOW(), NOW(), 0)")
     int insertIfNotExist(String tagName);
+
+    @Select("SELECT tag_name,COUNT(*) articleCount FROM mtb_article_tag GROUP BY tag_name ORDER BY articleCount DESC LIMIT #{n}")
+    List<HotTagVO> selectHotTags(@Param("n") Integer n);
 }
 
 

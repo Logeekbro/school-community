@@ -2,6 +2,7 @@ package com.db.dbcommunity.article.service;
 
 import com.db.dbcommunity.article.model.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.db.dbcommunity.article.model.vo.HotTagVO;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,9 @@ public interface TagService extends IService<Tag> {
      * 根据关键字模糊匹配标签名列表
      */
     List<Map<String, Object>> getSimilarTagsByKeyword(String keyword);
+
+    /**
+     * 获取前n个热门标签
+     */
+    List<HotTagVO> getHotTags(Integer n);
 }

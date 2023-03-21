@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.db.dbcommunity.article.model.entity.Tag;
 import com.db.dbcommunity.article.model.mtb.ArticleTag;
+import com.db.dbcommunity.article.model.vo.HotTagVO;
 import com.db.dbcommunity.article.service.TagService;
 import com.db.dbcommunity.article.mapper.TagMapper;
 import com.db.dbcommunity.common.mapper.MiddleTableMapper;
@@ -48,6 +49,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
         queryWrapper.select(Tag::getTagName);
         queryWrapper.like(Tag::getTagName, keyword);
         return this.baseMapper.selectMaps(queryWrapper);
+    }
+
+    @Override
+    public List<HotTagVO> getHotTags(Integer n) {
+        return this.baseMapper.selectHotTags(n);
     }
 }
 
