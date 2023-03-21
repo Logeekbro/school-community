@@ -14,7 +14,6 @@
             <result property="sectionId" column="section_id" jdbcType="INTEGER"/>
             <result property="top" column="top" jdbcType="BIT"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
-            <result property="viewCount" column="view_count" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="deleted" column="deleted" jdbcType="BIT"/>
@@ -44,7 +43,7 @@
     </select>
     <select id="selectArticlePageByUserId"
             resultType="com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO">
-        SELECT article_id,title,view_count,create_time,update_time FROM tb_article WHERE author_id=#{userId}
+        SELECT article_id,title,create_time,update_time FROM tb_article WHERE author_id=#{userId}
         AND deleted=0 AND status IN (0, 3)
         ORDER BY update_time DESC LIMIT #{offset},#{size}
     </select>

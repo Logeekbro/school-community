@@ -15,8 +15,6 @@ public class UserHomePageArticleInfoVO implements Serializable {
 
     private String title;
 
-    private Long viewCount;
-
     private Date createTime;
 
     private Date updateTime;
