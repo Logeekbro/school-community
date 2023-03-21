@@ -133,7 +133,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(User::getAvatar);
         queryWrapper.eq(User::getUserId, userId);
-        return this.baseMapper.selectOne(queryWrapper).getAvatar();
+        User user = this.baseMapper.selectOne(queryWrapper);
+        return user != null ? user.getAvatar() : null;
 
     }
 }
