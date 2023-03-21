@@ -34,11 +34,10 @@ public class UserInfoController {
     }
 
     /**
-     * 获取用户的基本信息
+     * 根据用户id获取用户的基本信息
      */
-    @GetMapping("/basic")
-    public R<UserBasicInfoVO> getUserBasicInfo() {
-        Long userId = UserContext.getCurrentUserId();
+    @GetMapping("/basic/{userId}")
+    public R<UserBasicInfoVO> getUserBasicInfo(@PathVariable Long userId) {
         UserBasicInfoVO vo = userService.getUserBasicInfoById(userId);
         return R.success(vo);
     }
