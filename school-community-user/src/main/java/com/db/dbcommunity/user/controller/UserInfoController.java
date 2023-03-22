@@ -5,6 +5,7 @@ import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
+import com.db.dbcommunity.user.model.dto.UserDetailInfoDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.db.dbcommunity.user.model.vo.UserDetailInfoVO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
@@ -94,7 +95,7 @@ public class UserInfoController {
      * 修改用户详细信息
      */
     @PutMapping("/")
-    public R<Void> updateUserDetailInfo(@RequestBody @Validated UserDetailInfoVO vo) {
+    public R<Void> updateUserDetailInfo(@RequestBody @Validated UserDetailInfoDTO vo) {
         vo.setUserId(UserContext.getCurrentUserId());
         return userService.updateDetailInfo(vo) ? R.success() : R.failed();
     }

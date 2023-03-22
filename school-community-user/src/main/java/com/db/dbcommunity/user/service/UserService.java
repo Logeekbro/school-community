@@ -1,6 +1,7 @@
 package com.db.dbcommunity.user.service;
 
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
+import com.db.dbcommunity.user.model.dto.UserDetailInfoDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.db.dbcommunity.user.model.vo.UserDetailInfoVO;
@@ -66,5 +67,5 @@ public interface UserService extends IService<User> {
     /**
      * 修改用户基本信息
      */
-    boolean updateDetailInfo(UserDetailInfoVO vo);
+    boolean updateDetailInfo(UserDetailInfoDTO vo);
 }
