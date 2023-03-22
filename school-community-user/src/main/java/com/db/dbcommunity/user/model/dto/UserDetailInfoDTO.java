@@ -21,4 +21,6 @@ public class UserDetailInfoDTO {
     private String phone;
 
     private String introduce;
+
+    private String avatar;
 }

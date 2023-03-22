@@ -99,4 +99,13 @@ public class UserInfoController {
         vo.setUserId(UserContext.getCurrentUserId());
         return userService.updateDetailInfo(vo) ? R.success() : R.failed();
     }
+
+    /**
+     * 提供给服务内部调用的修改用户信息接口，不对数据进行校验
+     */
+    @PutMapping("/internal")
+    public R<Void> updateUserDetailInfoInternal(@RequestBody UserDetailInfoDTO vo) {
+        vo.setUserId(UserContext.getCurrentUserId());
+        return userService.updateDetailInfo(vo) ? R.success() : R.failed();
+    }
 }
