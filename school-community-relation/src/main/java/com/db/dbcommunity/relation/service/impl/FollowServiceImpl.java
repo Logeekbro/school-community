@@ -25,9 +25,9 @@ public class FollowServiceImpl implements FollowService {
                     .add(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId.toString(), now);
         } else {
             stringRedisTemplate.opsForZSet()
-                    .remove(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId);
+                    .remove(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId.toString());
             stringRedisTemplate.opsForZSet()
-                    .remove(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId);
+                    .remove(RedisNameSpace.FANS_PREFIX + beFollowUserId, currentUserId.toString());
         }
         // 将当前被关注者id存入粉丝数量有更新的集合中
         stringRedisTemplate.opsForSet().add(RedisNameSpace.FANS_COUNT_BE_UPDATED_USER_IDS, beFollowUserId.toString());
@@ -36,7 +36,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public boolean isFollow(Long currentUserId, Long beFollowUserId) {
-        return stringRedisTemplate.opsForZSet().rank(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId) != null;
+        return stringRedisTemplate.opsForZSet().rank(RedisNameSpace.FOLLOW_PREFIX + currentUserId, beFollowUserId.toString()) != null;
     }
 
     @Override
