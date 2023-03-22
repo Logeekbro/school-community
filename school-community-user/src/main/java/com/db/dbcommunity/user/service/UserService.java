@@ -3,6 +3,7 @@ package com.db.dbcommunity.user.service;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.db.dbcommunity.user.model.vo.UserDetailInfoVO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 
@@ -61,4 +62,9 @@ public interface UserService extends IService<User> {
      * 根据用户id获取用户昵称
      */
     String getNickNameByUserId(Long userId);
+
+    /**
+     * 修改用户基本信息
+     */
+    boolean updateDetailInfo(UserDetailInfoVO vo);
 }

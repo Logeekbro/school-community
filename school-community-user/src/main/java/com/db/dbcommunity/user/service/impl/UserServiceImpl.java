@@ -12,6 +12,7 @@ import com.db.dbcommunity.user.enums.DataChangeType;
 import com.db.dbcommunity.user.feign.ESFeignClient;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
 import com.db.dbcommunity.user.model.entity.User;
+import com.db.dbcommunity.user.model.vo.UserDetailInfoVO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.model.vo.UserRegisterVO;
 import com.db.dbcommunity.user.service.RoleService;
@@ -145,6 +146,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq(User::getUserId, userId);
         User user = this.baseMapper.selectOne(queryWrapper);
         return user != null ? user.getNickName() : null;
+    }
+
+    @Override
+    public boolean updateDetailInfo(UserDetailInfoVO vo) {
+        return dataChangeCall(DataChangeType.UPDATE_BASIC_INFO.getDesc(), () -> this.baseMapper.updateById(MyBeanUtil.copyProps(vo, User.class)) > 0);
     }
 }
 

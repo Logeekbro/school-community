@@ -1,12 +1,15 @@
 package com.db.dbcommunity.user.controller;
 
 import com.db.dbcommunity.common.api.R;
-import com.db.dbcommunity.common.constant.UserConstant;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
+import com.db.dbcommunity.common.util.MyBeanUtil;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.user.model.dto.UserAuthDTO;
+import com.db.dbcommunity.user.model.entity.User;
+import com.db.dbcommunity.user.model.vo.UserDetailInfoVO;
 import com.db.dbcommunity.user.model.vo.UserBasicInfoVO;
 import com.db.dbcommunity.user.service.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -78,4 +81,21 @@ public class UserInfoController {
         return R.success(new SingleKeyVO(userService.getNickNameByUserId(userId)));
     }
 
+    /**
+     * 获取用户详细信息
+     */
+    @GetMapping("/detail")
+    public R<UserDetailInfoVO> getUserDetailInfo() {
+        User user = userService.getById(UserContext.getCurrentUserId());
+        return R.success(MyBeanUtil.copyProps(user, UserDetailInfoVO.class));
+    }
+
+    /**
+     * 修改用户详细信息
+     */
+    @PutMapping("/detail")
+    public R<Void> updateUserDetailInfo(@RequestBody @Validated UserDetailInfoVO vo) {
+        vo.setUserId(UserContext.getCurrentUserId());
+        return userService.updateDetailInfo(vo) ? R.success() : R.failed();
+    }
 }
