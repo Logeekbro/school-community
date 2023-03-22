@@ -93,7 +93,7 @@ public class UserInfoController {
     /**
      * 修改用户详细信息
      */
-    @PutMapping("/detail")
+    @PutMapping("/")
     public R<Void> updateUserDetailInfo(@RequestBody @Validated UserDetailInfoVO vo) {
         vo.setUserId(UserContext.getCurrentUserId());
         return userService.updateDetailInfo(vo) ? R.success() : R.failed();
