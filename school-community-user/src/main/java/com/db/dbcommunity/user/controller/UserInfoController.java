@@ -105,7 +105,6 @@ public class UserInfoController {
      */
     @PutMapping("/internal")
     public R<Void> updateUserDetailInfoInternal(@RequestBody UserDetailInfoDTO vo) {
-        vo.setUserId(UserContext.getCurrentUserId());
         return userService.updateDetailInfo(vo) ? R.success() : R.failed();
     }
 }
