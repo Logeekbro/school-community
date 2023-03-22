@@ -7,8 +7,10 @@ import com.db.dbcommunity.visit.model.vo.HistoryWithDateVO;
 import com.db.dbcommunity.visit.model.vo.UserHistoryVO;
 import com.db.dbcommunity.visit.service.HistoryService;
 import com.db.dbcommunity.visit.mapper.HistoryMapper;
+import com.db.dbcommunity.visit.service.VisitService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,8 +22,12 @@ import java.util.List;
 public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History>
     implements HistoryService {
 
+    @Resource
+    private VisitService visitService;
+
     @Override
     public boolean add(Long currentUserId, Long articleId) {
+        visitService.handleVisit(currentUserId, articleId);
         History history = new History();
         history.setUserId(currentUserId);
         history.setArticleId(articleId);
