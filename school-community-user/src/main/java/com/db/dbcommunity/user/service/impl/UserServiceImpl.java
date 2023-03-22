@@ -115,6 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(this.baseMapper.exists(queryWrapper)) ApiAsserts.fail("用户名或邮箱已存在");
         User user = MyBeanUtil.copyProps(vo, User.class);
         user.setPassword(new BCryptPasswordEncoder().encode(vo.getPassword()));
+        if(vo.getNickName() == null) user.setNickName(vo.getUsername());
         boolean result = dataChangeCall(DataChangeType.USER_REGISTER.getDesc(), () -> this.baseMapper.insert(user) > 0);
         if(result) {
             // 索引用户至ES
