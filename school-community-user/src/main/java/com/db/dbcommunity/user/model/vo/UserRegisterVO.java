@@ -18,6 +18,5 @@ public class UserRegisterVO {
     @Email(message = "请输入正确的邮箱")
     private String email;
 
-    @NotEmpty(message = "昵称不能为空")
     private String nickName;
 }
