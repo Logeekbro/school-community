@@ -3,6 +3,8 @@ package com.db.dbcommunity.user.service;
 import com.db.dbcommunity.user.model.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author bin
 * @description 针对表【role(角色表)】的数据库操作Service
@@ -24,4 +26,9 @@ public interface RoleService extends IService<Role> {
      * 为用户添加角色
      */
     boolean addUserRoleByUserId(Long userId, Integer roleId);
+
+    /**
+     * 获取用户的角色id列表
+     */
+    List<String> getUserRoleIdList(Long userId);
 }

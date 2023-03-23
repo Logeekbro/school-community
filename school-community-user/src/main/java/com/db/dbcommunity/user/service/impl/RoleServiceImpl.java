@@ -64,6 +64,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
         }
         return result;
     }
+
+    @Override
+    public List<String> getUserRoleIdList(Long userId) {
+        return middleTableMapper.selectId2ListById1(userRole, userId);
+    }
 }
 
 

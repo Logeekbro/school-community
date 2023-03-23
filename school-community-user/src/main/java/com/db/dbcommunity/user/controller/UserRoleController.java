@@ -6,6 +6,7 @@ import com.db.dbcommunity.user.service.RoleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/role")
@@ -31,5 +32,13 @@ public class UserRoleController {
     @PostMapping("/user/{userId}")
     public R<Void> addUserRoleByUserId(@RequestParam Integer roleId, @PathVariable Long userId) {
         return roleService.addUserRoleByUserId(userId, roleId) ? R.success() : R.failed();
+    }
+
+    /**
+     * 获取用户的角色id列表
+     */
+    @GetMapping("/list/id")
+    public R<List<?>> getUserRoleIdList(@RequestParam Long userId) {
+        return R.success(roleService.getUserRoleIdList(userId));
     }
 }
