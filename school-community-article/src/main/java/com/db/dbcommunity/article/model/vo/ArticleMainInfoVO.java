@@ -19,6 +19,8 @@ public class ArticleMainInfoVO implements Serializable {
 
     private String mainPic;
 
+    private Boolean top;
+
     private Date createTime;
 
 }

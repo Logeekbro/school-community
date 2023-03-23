@@ -60,15 +60,15 @@
     </select>
     <select id="selectArticleMainInfoPageWithOrder"
             resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
-        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
-        WHERE status IN (0,3) AND deleted=0
+        SELECT article_id,author_id,main_pic,summary,top,create_time FROM tb_article
+        WHERE status IN (0,3) AND deleted=0 AND !top
         <if test="sectionId != null">
             AND section_id=#{sectionId}
         </if>
         ORDER BY ${order.field} ${order.type} LIMIT #{offset},#{size}
     </select>
     <select id="selectTopArticle" resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
-        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+        SELECT article_id,author_id,main_pic,summary,top,create_time FROM tb_article
         WHERE status IN (0,3) AND deleted=0 AND top
         <if test="sectionId != null">
             AND section_id=#{sectionId}
