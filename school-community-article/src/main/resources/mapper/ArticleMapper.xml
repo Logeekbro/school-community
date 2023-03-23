@@ -75,8 +75,8 @@
         </if>
     </select>
     <select id="selectNeedReviewArticleListById"
-            resultType="com.db.dbcommunity.article.model.vo.ArticleMainInfoVO">
-        SELECT article_id,author_id,main_pic,summary,create_time FROM tb_article
+            resultType="com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO">
+        SELECT article_id,title,summary,section_id,author_id,main_pic,content,create_time FROM tb_article
         WHERE status=1 AND deleted=0
         <if test="userId != null">
             AND author_id=#{userId}

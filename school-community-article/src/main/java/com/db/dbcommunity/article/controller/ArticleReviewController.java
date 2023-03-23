@@ -1,5 +1,6 @@
 package com.db.dbcommunity.article.controller;
 
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleMainInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleReviewResultVO;
 import com.db.dbcommunity.article.model.vo.UserHomePageArticleInfoVO;
@@ -23,8 +24,8 @@ public class ArticleReviewController {
      * 用户获取自己的待审核文章
      */
     @GetMapping("/list/my")
-    public R<List<ArticleMainInfoVO>> getUserNeedReviewArticleList() {
-        List<ArticleMainInfoVO> list = articleReviewService.getNeedReviewArticleListById(UserContext.getCurrentUserId());
+    public R<List<ArticleDetailInfoVO>> getUserNeedReviewArticleList() {
+        List<ArticleDetailInfoVO> list = articleReviewService.getNeedReviewArticleListById(UserContext.getCurrentUserId());
         return R.success(list);
     }
 
@@ -33,8 +34,8 @@ public class ArticleReviewController {
      * 获取所有待审核文章列表
      */
     @GetMapping("/list")
-    public R<List<ArticleMainInfoVO>> getAllNeedReviewArticleList() {
-        List<ArticleMainInfoVO> list = articleReviewService.getNeedReviewArticleListById(null);
+    public R<List<ArticleDetailInfoVO>> getAllNeedReviewArticleList() {
+        List<ArticleDetailInfoVO> list = articleReviewService.getNeedReviewArticleListById(null);
         return R.success(list);
     }
 

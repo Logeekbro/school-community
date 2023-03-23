@@ -4,6 +4,7 @@ import com.db.dbcommunity.article.enums.DataChangeType;
 import com.db.dbcommunity.article.feign.SearchFeignClient;
 import com.db.dbcommunity.article.mapper.ArticleMapper;
 import com.db.dbcommunity.article.model.entity.Article;
+import com.db.dbcommunity.article.model.vo.ArticleDetailInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleMainInfoVO;
 import com.db.dbcommunity.article.model.vo.ArticleReviewResultVO;
 import com.db.dbcommunity.article.service.ArticleReviewService;
@@ -28,7 +29,7 @@ public class ArticleReviewServiceImpl implements ArticleReviewService {
     private SearchFeignClient searchFeignClient;
 
     @Override
-    public List<ArticleMainInfoVO> getNeedReviewArticleListById(Long userId) {
+    public List<ArticleDetailInfoVO> getNeedReviewArticleListById(Long userId) {
         return articleMapper.selectNeedReviewArticleListById(userId);
     }
 

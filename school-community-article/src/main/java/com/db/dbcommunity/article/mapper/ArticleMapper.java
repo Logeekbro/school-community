@@ -54,7 +54,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("SELECT title FROM tb_article WHERE article_id=#{articleId} AND deleted=0")
     String selectTitleById(@Param("articleId") Long articleId);
 
-    List<ArticleMainInfoVO> selectNeedReviewArticleListById(@Param("userId") Long userId);
+    List<ArticleDetailInfoVO> selectNeedReviewArticleListById(@Param("userId") Long userId);
 
     @Update("UPDATE tb_article SET top=(top=0) WHERE article_id=#{articleId}")
     boolean updateArticleTopStatus(@Param("articleId") Long articleId);
