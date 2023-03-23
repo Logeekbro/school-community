@@ -4,6 +4,7 @@ import com.db.dbcommunity.common.api.R;
 import com.db.dbcommunity.common.model.vo.SingleKeyVO;
 import com.db.dbcommunity.common.util.UserContext;
 import com.db.dbcommunity.thirdparty.service.UploadService;
+import com.db.dbcommunity.thirdparty.vo.ArticleImgVO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,4 +37,14 @@ public class FileUploadController {
     public R<Void> uploadAvatar(MultipartFile file, boolean haveAvatar) {
         return uploadService.uploadAvatar(UserContext.getCurrentUserId(), file, haveAvatar) ? R.success() : R.failed();
     }
+
+    /**
+     * 上传文章图片
+     */
+    @PostMapping("/article/img")
+    public R<ArticleImgVO> uploadArticleImg(MultipartFile[] files){
+        ArticleImgVO data = uploadService.uploadArticleImg(files);
+        return new R<>(0, "上传成功", data);
+    }
+
 }
