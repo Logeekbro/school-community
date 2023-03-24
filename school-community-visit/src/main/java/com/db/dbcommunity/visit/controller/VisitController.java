@@ -20,7 +20,7 @@ public class VisitController {
     /**
      * 记录用户浏览文章
      */
-    @PostMapping("/article")
+    @PostMapping(value = "/article", name = "记录用户浏览文章_true")
     public R<Void> handleVisit(@RequestParam Long articleId) {
         return visitService.handleVisit(UserContext.getCurrentUserId(), articleId) ? R.success() : R.failed();
     }
@@ -28,7 +28,7 @@ public class VisitController {
     /**
      * 根据文章id获取文章浏览量
      */
-    @GetMapping("/count/article")
+    @GetMapping(value = "/count/article", name = "根据文章id获取文章浏览量_true")
     public R<SingleKeyVO> getVisitCountByArticleId(@RequestParam Long articleId) {
         Long count = visitService.getVisitCountByArticleId(articleId);
         return R.success(new SingleKeyVO(count));

@@ -32,7 +32,7 @@ public class UserInfoController {
     /**
      * 获取用户登录时的验证信息
      */
-    @GetMapping("/userAuth")
+    @GetMapping(value = "/userAuth")
     public R<UserAuthDTO> getUserAuthByUsername(String username) {
         UserAuthDTO userAuthDTO = userService.getUserAuthByAccount(username);
         return R.success(userAuthDTO);
@@ -41,7 +41,7 @@ public class UserInfoController {
     /**
      * 获取用户自身的基本信息
      */
-    @GetMapping("/basic")
+    @GetMapping(value = "/basic", name = "获取用户自身的基本信息_true")
     public R<UserBasicInfoVO> getSelfBasicInfo() {
         UserBasicInfoVO vo = userService.getUserBasicInfoById(UserContext.getCurrentUserId());
         return R.success(vo);
@@ -50,7 +50,7 @@ public class UserInfoController {
     /**
      * 根据用户id获取用户的基本信息
      */
-    @GetMapping("/basic/{userId}")
+    @GetMapping(value = "/basic/{userId}", name = "根据用户id获取用户的基本信息_true")
     public R<UserBasicInfoVO> getUserBasicInfo(@PathVariable Long userId) {
         UserBasicInfoVO vo = userService.getUserBasicInfoById(userId);
         return R.success(vo);
@@ -61,7 +61,7 @@ public class UserInfoController {
     /**
      * 修改密码
      */
-    @PutMapping("/password")
+    @PutMapping(value = "/password", name = "修改密码_true")
     public R<Void> updatePassword(@RequestBody Map<String, String> body) {
         return userService.updatePassword(body.get("oldPwd"), body.get("newPwd"), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
@@ -69,7 +69,7 @@ public class UserInfoController {
     /**
      * 根据用户id获取头像
      */
-    @GetMapping("/avatar")
+    @GetMapping(value = "/avatar", name = "根据用户id获取头像_true")
     public R<SingleKeyVO> getUserAvatar(@RequestParam Long userId) {
         return R.success(new SingleKeyVO(userService.getAvatarByUserId(userId)));
     }
@@ -77,7 +77,7 @@ public class UserInfoController {
     /**
      * 根据用户id获取昵称
      */
-    @GetMapping("/nickName")
+    @GetMapping(value = "/nickName", name = "根据用户id获取昵称_true")
     public R<SingleKeyVO> getUserNickName(@RequestParam Long userId) {
         return R.success(new SingleKeyVO(userService.getNickNameByUserId(userId)));
     }
@@ -85,7 +85,7 @@ public class UserInfoController {
     /**
      * 获取用户详细信息
      */
-    @GetMapping("/detail")
+    @GetMapping(value = "/detail", name = "获取用户详细信息_true")
     public R<UserDetailInfoVO> getUserDetailInfo() {
         User user = userService.getById(UserContext.getCurrentUserId());
         return R.success(MyBeanUtil.copyProps(user, UserDetailInfoVO.class));
@@ -94,7 +94,7 @@ public class UserInfoController {
     /**
      * 修改用户详细信息
      */
-    @PutMapping("/")
+    @PutMapping(value = "/", name = "修改用户详细信息_true")
     public R<Void> updateUserDetailInfo(@RequestBody @Validated UserDetailInfoDTO vo) {
         vo.setUserId(UserContext.getCurrentUserId());
         return userService.updateDetailInfo(vo) ? R.success() : R.failed();

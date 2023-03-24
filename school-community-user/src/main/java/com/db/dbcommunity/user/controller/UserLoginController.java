@@ -35,7 +35,7 @@ public class UserLoginController {
     /**
      * 退出登录
      */
-    @DeleteMapping("/logout")
+    @DeleteMapping(value = "/logout", name = "退出登录_true")
     public R<Void> logout() {
         return userService.logout(UserContext.getCurrentUserJti(), UserContext.getCurrentUserId()) ? R.success() : R.failed();
     }
@@ -44,7 +44,7 @@ public class UserLoginController {
      * AdminAPI
      * 封禁用户
      */
-    @PutMapping("/ban/{userId}")
+    @PutMapping(value = "/ban/{userId}", name = "封禁用户_f")
     public R<Void> ban(@PathVariable Long userId) {
         return userService.ban(userId) ? R.success() : R.failed();
     }

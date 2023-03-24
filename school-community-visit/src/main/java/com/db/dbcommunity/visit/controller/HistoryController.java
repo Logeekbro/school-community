@@ -21,7 +21,7 @@ public class HistoryController {
     /**
      * 记录用户的文章浏览记录
      */
-    @PostMapping("/article")
+    @PostMapping(value = "/article", name = "记录用户的文章浏览记录_true")
     public R<Void> saveArticleHistory(@RequestParam Long articleId) {
         return historyService.add(UserContext.getCurrentUserId(), articleId) ? R.success() : R.failed();
     }
@@ -29,7 +29,7 @@ public class HistoryController {
     /**
      * 根据日期获取用户的文章浏览记录
      */
-    @GetMapping("/date")
+    @GetMapping(value = "/date", name = "根据日期获取用户的文章浏览记录_true")
     public R<HistoryWithDateVO> getUserHistoryByDate(@RequestParam String targetDate) {
         HistoryWithDateVO result = historyService.getUserHistoryByDate(UserContext.getCurrentUserId(), targetDate);
         return R.success(result);
@@ -38,7 +38,7 @@ public class HistoryController {
     /**
      * 根据id删除浏览记录
      */
-    @DeleteMapping("/id")
+    @DeleteMapping(value = "/id", name = "根据id删除浏览记录_true")
     public R<Void> deleteHistoryById(@RequestParam Long historyId) {
         return historyService.deleteHistoryById(UserContext.getCurrentUserId(), historyId) ? R.success() : R.failed();
     }
@@ -46,7 +46,7 @@ public class HistoryController {
     /**
      * 删除用户的所有历史记录
      */
-    @DeleteMapping("/all")
+    @DeleteMapping(value = "/all", name = "删除用户的所有历史记录")
     public R<SingleKeyVO> deleteAllHistoryByUserId() {
         int count = historyService.deleteAllHistoryByUserId(UserContext.getCurrentUserId());
         return R.success(new SingleKeyVO(count));
