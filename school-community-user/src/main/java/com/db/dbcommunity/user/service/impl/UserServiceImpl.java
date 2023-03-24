@@ -56,6 +56,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return this.baseMapper.selectUserBasicInfoById(userId);
     }
 
+    /**
+     * 清除该用户所有已登录设备
+     */
+    private boolean clearLoginStatus(Long userId) {
+        return Boolean.TRUE.equals(stringRedisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId));
+    }
+
     @Override
     public boolean updatePassword(String oldPwd, String newPwd, Long userId) {
         if(newPwd.length() < 6) {
@@ -70,8 +77,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             boolean result =
                     dataChangeCall(DataChangeType.UPDATE_PASSWORD.getDesc(), () -> this.baseMapper.updateById(user) > 0);
             if(result) {
-                // 登出账号
-                logout(UserContext.getCurrentUserJti(), UserContext.getCurrentUserId());
+                // 清除已登陆账号
+                clearLoginStatus(userId);
             }
             return result;
         }
@@ -98,7 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public boolean ban(Long userId) {
         // 删除jti集合
-        boolean redisDelete = Boolean.TRUE.equals(stringRedisTemplate.delete(RedisNameSpace.JTI_PREFIX + userId));
+        boolean redisDelete =  clearLoginStatus(userId);
         // 改变status字段
         User user = new User();
         user.setUserId(userId);
