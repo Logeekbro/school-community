@@ -20,7 +20,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     UserAuthDTO selectUserAuthByAccount(@Param("account") String account);
 
-    @Select("SELECT user_id, username, nick_name, avatar, create_time FROM user WHERE user_id=#{userId} AND deleted=0")
+    @Select("SELECT user_id, username, nick_name, avatar, introduce, create_time FROM user WHERE user_id=#{userId} AND deleted=0")
     UserBasicInfoVO selectUserBasicInfoById(@Param("userId") Long userId);
 }
 

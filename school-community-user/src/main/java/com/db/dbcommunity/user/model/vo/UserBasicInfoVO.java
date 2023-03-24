@@ -20,6 +20,8 @@ public class UserBasicInfoVO implements Serializable {
 
     private String avatar;
 
+    private String introduce;
+
     private Date createTime;
 
 }
