@@ -52,7 +52,7 @@ class SchoolCommunityVisitApplicationTests {
 					map.put("name",name.substring(0, name.indexOf('_')));
 					map.put("urlPerm",urlPerm);
 					System.out.println(map);
-//					userPermissionFeignClient.addPermission(map);
+					userPermissionFeignClient.addPermission(map);
 				}
 			}
 		}
