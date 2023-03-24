@@ -5,6 +5,7 @@ import com.db.dbcommunity.user.controller.UserRoleController;
 import com.db.dbcommunity.user.mapper.RoleMapper;
 import com.db.dbcommunity.user.model.entity.Role;
 import com.db.dbcommunity.user.model.vo.PermissionCreateVO;
+import com.db.dbcommunity.user.service.PermissionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -28,6 +29,9 @@ class SchoolCommunityUserApplicationTests {
 
     @Resource
     private ApplicationContext applicationContext;
+
+    @Resource
+    private PermissionService permissionService;
 
     @Test
     void generatePermission() {
@@ -56,6 +60,7 @@ class SchoolCommunityUserApplicationTests {
                     permissionCreateVO.setName(name.substring(0, name.indexOf('_')));
                     permissionCreateVO.setUrlPerm(urlPerm);
                     System.out.println(permissionCreateVO);
+                    permissionService.savePermission(permissionCreateVO);
                 }
             }
         }
