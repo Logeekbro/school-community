@@ -26,6 +26,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -67,8 +68,12 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
                 .any(authority -> {
                     String roleCode = authority.substring(AuthConstant.AUTHORITY_PREFIX.length()); // 用户的角色
                     if (roleCode.equals(AuthConstant.ROOT_ROLE_CODE)) return true;
-                    Boolean isMember = stringRedisTemplate.opsForSet().isMember(GlobalConstant.ROLE_URL_PERMS_KEY + roleCode, restfulPath);
-                    return Boolean.TRUE.equals(isMember);
+//                    Boolean isMember = stringRedisTemplate.opsForSet().isMember(GlobalConstant.ROLE_URL_PERMS_KEY + roleCode, restfulPath);
+                    // 综合考虑各种原因后，此处使用一种相对低效但适用范围广的方式来简单地完成接口权限验证
+                    Set<String> permissions = stringRedisTemplate.opsForSet().members(GlobalConstant.ROLE_URL_PERMS_KEY + roleCode);
+                    if(permissions == null) return false;
+                    return permissions.stream()
+                            .anyMatch(s -> UrlPatternUtil.match(s, restfulPath));
                 })
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
