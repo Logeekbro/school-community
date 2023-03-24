@@ -29,7 +29,7 @@ public class UserRoleController {
     /**
      * 为用户添加角色
      */
-    @PostMapping(value = "/user/{userId}", name = "为用户添加角色_")
+    @PostMapping(value = "/user/{userId}", name = "为用户添加角色_f")
     public R<Void> addUserRoleByUserId(@RequestParam Integer roleId, @PathVariable Long userId) {
         return roleService.addUserRoleByUserId(userId, roleId) ? R.success() : R.failed();
     }

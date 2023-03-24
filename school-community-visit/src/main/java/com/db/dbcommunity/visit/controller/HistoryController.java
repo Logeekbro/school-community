@@ -46,7 +46,7 @@ public class HistoryController {
     /**
      * 删除用户的所有历史记录
      */
-    @DeleteMapping(value = "/all", name = "删除用户的所有历史记录")
+    @DeleteMapping(value = "/all", name = "删除用户的所有历史记录_true")
     public R<SingleKeyVO> deleteAllHistoryByUserId() {
         int count = historyService.deleteAllHistoryByUserId(UserContext.getCurrentUserId());
         return R.success(new SingleKeyVO(count));
